@@ -1,14 +1,20 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Include.mk                                         :+:      :+:    :+:    #
+#    include.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: guhernan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/20 17:09:11 by guhernan          #+#    #+#              #
-#    Updated: 2022/01/20 17:26:39 by guhernan         ###   ########.fr        #
+#    Created: 2022/02/10 17:08:38 by guhernan          #+#    #+#              #
+#    Updated: 2022/02/10 18:23:57 by guhernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-$(PATH_TO_INCLUDE) := $(PATH_TO_INCLUDE) \
-					  $(abspath
+_SRCS_GUNNER 		:= main.cpp
+_INC_GUNNER			:= VectorTester.hpp \
+					   VectorTesterUtils.hpp \
+					   ITester.hpp \
+					   ft_random.hpp 
+
+_SRCS_GUNNER_PATH	:= $(addprefix $(SRCS_DIR)/, $(_SRCS_GUNNER))
+_INC_GUNNER_PATH	:= $(addprefix $(SRCS_DIR)/, $(_INC_GUNNER))

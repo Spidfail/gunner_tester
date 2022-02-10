@@ -6,7 +6,7 @@
 /*   By: guhernan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 19:21:21 by guhernan          #+#    #+#             */
-/*   Updated: 2022/01/20 14:10:05 by guhernan         ###   ########.fr       */
+/*   Updated: 2022/02/09 22:14:55 by guhernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 #include <cstring>
 #include <memory>
 #include <algorithm>
-
-#include "ft_vector.hpp"
-#include "main.hpp"
+#include "Vector.hpp"
+#include "VectorTester.hpp"
 #include "ITester.hpp"
-
+#include "IteratorVector.hpp"
+#include "IsIntegral.hpp"
+#include <typeinfo>
 
 int		main(int ac, char **av) {
 
@@ -29,6 +30,14 @@ int		main(int ac, char **av) {
 	ft::ITester	*test = new VectorTester<int>;
 	test->init();
 	test->get_status();
-	test->unitest_accessors_all();
+	try {
+		test->launch_capacity();
+		test->launch_accessors();
+		test->launch_modifiers();
+		test->launch_iterators();
+		test->launch_constructor();
+	}
+	catch (std::exception &e) { std::cout << e.what() << std::endl; }
 
+	delete test;
 }

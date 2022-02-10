@@ -6,7 +6,7 @@
 /*   By: guhernan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 19:38:05 by guhernan          #+#    #+#             */
-/*   Updated: 2022/01/19 20:40:58 by guhernan         ###   ########.fr       */
+/*   Updated: 2022/02/10 20:38:09 by guhernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ namespace ft {
 	class ITester {
 
 		public:
+			typedef		std::size_t											size_type;
 			typedef		typename std::ofstream	*							type_file;
 			typedef		typename std::map< std::string, type_file>			type_f_map;
 			typedef		typename std::map< std::string, std::string >		type_fnames_map;
@@ -37,13 +38,12 @@ namespace ft {
 			typedef		typename type_exec_time::iterator					iterator_exec_time;
 
 			////////////////////////////////////////////////////////////////////////////////////////////////
-			/////////////////////////////NESTED CLASSES/////////////////////////////////////////////////////
+			/////////////////////////////NESTED CLASSES FOLDER//////////////////////////////////////////////
 			//
 			class Folder {
 
 				private:
-					Folder() : _files(), _files_names(), _container_name(), _end_id(), _turn_in_directory() {
-					}
+					Folder() : _files(), _files_names(), _container_name(), _end_id(), _turn_in_directory() { }
 
 				protected:
 					type_f_map			_files;
@@ -54,35 +54,32 @@ namespace ft {
 
 
 				public:
-					///////////////////////////////////////////////////////////////////////////////////////////////////
 					///////////////////////////////////////CONSTRUCTORS////////////////////////////////////////////////
 					//
 					Folder(const Folder &source)
 						: _files(source._files), _files_names(source._files_names),
 						_container_name(source._container_name), _end_id(source._end_id),
-						_turn_in_directory(source._turn_in_directory) {
-						}
+						_turn_in_directory(source._turn_in_directory) { }
 
 					Folder(const std::string &container_name, const std::string &end_id)
 						: _files(), _files_names(), _container_name(container_name), _end_id(end_id),
-						_turn_in_directory("./gunner_results/") {
-						}
+						_turn_in_directory("./gunner_results/") { }
 
-					Folder(const std::string &container_name, const std::string &end_id, const std::string &dir_path)
+					Folder(const std::string &container_name, const std::string &end_id,
+							const std::string &dir_path)
 						: _files(), _files_names(), _container_name(container_name), _end_id(end_id),
-						_turn_in_directory(dir_path) {
-						}
+						_turn_in_directory(dir_path) { }
 
 					virtual ~Folder() {
 						for (iterator_files it = _files.begin() ; it != _files.end() ; it++) {
 							it->second->close();
+							delete it->second;
 						}
 					}
-					///////////////////////////////////////////////////////////////////////////////////////////////////
+
 					///////////////////////////////////////INITIALISATION//////////////////////////////////////////////
 					//
 					virtual Folder		&_init_folder() {
-
 						this->_files_names["constructor"]=_container_name + "_constructor_results_";
 						this->_files_names["accessors"]=_container_name + "_accessors_results_";
 						this->_files_names["iterators"]=_container_name + "_iterators_results_";
@@ -113,7 +110,6 @@ namespace ft {
 						return *this;
 					}
 
-					///////////////////////////////////////////////////////////////////////////////////////////////////
 					///////////////////////////////////////OPERATORS///////////////////////////////////////////////////
 					//
 					Folder	&operator=(const Folder &source) {
@@ -123,46 +119,28 @@ namespace ft {
 						this->_files_names = source._files_names;
 						return *this;
 					}
-					///////////////////////////////////////////////////////////////////////////////////////////////////
+
 					///////////////////////////////////////ACCESSORS///////////////////////////////////////////////////
 					//
-					Folder					*get_data() {
-						return this;
-					}
+					Folder					*get_data() { return this; }
 
-					std::string				get_file_name(const std::string &key) {
-						return _files_names[key];
-					}
+					std::string				get_file_name(const std::string &key) { return _files_names[key]; }
 
-					type_file				get_file(const std::string &key) {
-						return _files[key];
-					}
+					type_file				get_file(const std::string &key) { return _files[key]; }
 
-					std::string				get_directory_name() {
-						return this->_turn_in_directory;
-					}
+					std::string				get_directory_name() { return this->_turn_in_directory; }
 
-					std::string				&get_end_id() {
-						return this->_end_id;
-					}
-					///////////////////////////////////////////////////////////////////////////////////////////////////
+					std::string				&get_end_id() { return this->_end_id; }
+
 					///////////////////////////////////////ITERATORS///////////////////////////////////////////////////
 					//
-					iterator_files			begin_files() {
-						return this->_files.begin();
-					}
+					iterator_files			begin_files() { return this->_files.begin(); }
 
-					iterator_files_names	begin_files_names() {
-						return this->_files_names.begin();
-					}
+					iterator_files_names	begin_files_names() { return this->_files_names.begin(); }
 
-					iterator_files			end_files() {
-						return this->_files.end();
-					}
+					iterator_files			end_files() { return this->_files.end(); }
 
-					iterator_files_names	end_files_names() {
-						return this->_files_names.end();
-					}
+					iterator_files_names	end_files_names() { return this->_files_names.end(); }
 					///////////////////////////////////////////////////////////////////////////////////////////////////
 			};
 			//
@@ -172,38 +150,32 @@ namespace ft {
 		protected:
 			int					_test_nb;
 			type_exec_time		_exec_time;
+			short int			_folder_nb;
 			Folder				*_folder_std;
 			Folder				*_folder_ft;
 
 			ITester() 
-				: _test_nb(0), _exec_time(), _folder_std(NULL), _folder_ft(NULL) {
-				}
+				: _test_nb(0), _exec_time(), _folder_nb(1), _folder_std(NULL), _folder_ft(NULL) { }
 
 			ITester(const ITester &source)
-				: _test_nb(source._test_nb), _exec_time(source._exec_time),
-				_folder_std(NULL), _folder_ft(NULL) {
-				}
-
-			virtual ~ITester() {
-			}
+				: _test_nb(source._test_nb), _exec_time(source._exec_time), _folder_nb(1),
+				_folder_std(NULL), _folder_ft(NULL) { }
 
 
-			virtual void		_init_files(std::string container_name = "vector", std::string dir_path = "./gunner_results/") = 0;
+			virtual void		_init_files(std::string container_name = "vector",
+											std::string dir_path = "./gunner_results/") = 0;
 			virtual void		_init_exec_time() = 0;
 
 		public:
-			////////////////////////////////////////////////////////////////////////////////////
+			virtual ~ITester() {
+			}
+
 			//////////////////////////////////////INIT//////////////////////////////////////////
 			//
-			virtual void		init() = 0;
-			////////////////////////////////////////////////////////////////////////////////////
+			virtual void				init() = 0;
 			//////////////////////////////////////CONSTRUCTORS//////////////////////////////////
 			//
-			virtual void		unitest_constructor_empty() = 0;
-			virtual void		unitest_constructor_range() = 0;
-			virtual void		unitest_constructor_copy() = 0;
-			virtual void		unitest_constructor_all() = 0;
-			////////////////////////////////////////////////////////////////////////////////////
+			virtual void				launch_constructor() = 0;
 			//////////////////////////////////////ACCESSORS/////////////////////////////////////
 			//
 			virtual type_exec_time		&get_exec_time() = 0;
@@ -211,17 +183,17 @@ namespace ft {
 			virtual int					get_test_nb() = 0;
 			virtual void				get_status() = 0;
 
-			virtual void				unitest_accessors_all() = 0;
-			////////////////////////////////////////////////////////////////////////////////////
+			virtual void				launch_accessors() = 0;
+			//////////////////////////////////////CONSTRUCTORS//////////////////////////////////
+			//
+			virtual void				launch_iterators() = 0;
 			//////////////////////////////////////CAPACITY//////////////////////////////////////
 			//
-			virtual void							unitest_capacity_all() = 0;
-			////////////////////////////////////////////////////////////////////////////////////
+			virtual void				launch_capacity() = 0;
 			//////////////////////////////////////MODIFIERS/////////////////////////////////////
 			//
-			virtual void							unitest_modifiers_all() = 0;
+			virtual void				launch_modifiers() = 0;
 	};
-
 }
 
 #endif

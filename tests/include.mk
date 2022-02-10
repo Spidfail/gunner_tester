@@ -1,14 +1,23 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Include.mk                                         :+:      :+:    :+:    #
+#    include.mk                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: guhernan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/20 17:07:38 by guhernan          #+#    #+#              #
-#    Updated: 2022/01/20 17:08:34 by guhernan         ###   ########.fr        #
+#    Created: 2022/02/10 17:14:32 by guhernan          #+#    #+#              #
+#    Updated: 2022/02/10 18:11:12 by guhernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-$(SRCS) := $(SRCS) \
-		   VectorTester.hpp
+_INC_TEST_V			:=	VectorAccessorsTests.hpp \
+						VectorCapacityTests.hpp \
+						VectorConstructorTests.hpp \
+						VectorIteratorsTests.hpp \
+						VectorModifiersTests.hpp
+
+ _INC_TEST_V_PATH	:=	$(addprefix $(_INC_TEST_V_DIR)/, $(_INC_TEST_V))
+# 
+# _INC_TEST_M_PATH	:=	$(addprefix $(_INC_TEST_M_DIR)/, $(_INC_TEST_M))
+# 
+# _INC_TEST_S_PATH	:=	$(addprefix $(_INC_TEST_S_DIR)/, $(_INC_TEST_S))
