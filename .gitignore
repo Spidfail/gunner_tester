@@ -30,6 +30,8 @@
 *.exe
 *.out
 *.app
+gunner_container
+
 
 # Compile database with compildb for nvim
 compile_commands.json

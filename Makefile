@@ -6,7 +6,7 @@
 #    By: guhernan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/09 22:18:19 by guhernan          #+#    #+#              #
-#    Updated: 2022/02/10 20:35:23 by guhernan         ###   ########.fr        #
+#    Updated: 2022/02/10 23:01:13 by guhernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,9 @@ include $(SRCS_DIR)/include.mk
 _INC_TEST_V			:= 
 _INC_TEST_V_PATH	:= 
 # _INC_TEST_M			:=
-# _INC_TEST_M_PATH	:=
+# _INC_TEST_M_PATH		:=
 # _INC_TEST_S			:=
-# _INC_TEST_S_PATH	:=
+# _INC_TEST_S_PATH		:=
 include $(_INC_TEST_DIR)/include.mk
 
 
@@ -49,11 +49,11 @@ _INC_TESTS_DIR			:= $(_INC_TEST_V_DIR) $(_INC_TEST_M_DIR) $(_INC_TEST_S_DIR)
 
 ################################################################################
 
-_TESTED_CONTAINER		:= $(shell find .. -path '../gunner_container' -type d -prune -o -name "*.*pp" -type f -print)
+_TESTED_CONTAINER		:= $(shell find .. -path '../gunner_tester' -type d -prune -o -name "*.*pp" -type f -print)
 _INC_CONTAINER_PATH		:= $(filter %.hpp, $(_TESTED_CONTAINER))
 _SRCS_CONTAINER_PATH	:= $(filter %.cpp, $(_TESTED_CONTAINER))
 
-_CONTAINER_DIR			:= $(shell find .. -path '../gunner_container' -type d -prune -o -path '../.git' -type d -prune -o -type d -print | tr '\n' ' ')
+_CONTAINER_DIR			:= $(shell find .. -path '../gunner_tester' -type d -prune -o -path '../.git' -type d -prune -o -path './gunner_results' -type d -prune -o  -type d -print | tr '\n' ' ')
 
 _CONTAINER_DIR_OBJ		:= $(subst ../, ,$(_CONTAINER_DIR))
 #_INC_CONTAINER			:= $(notdir $(_INC_CONTAINER_PATH))
@@ -63,7 +63,7 @@ _CONTAINER_DIR_OBJ		:= $(subst ../, ,$(_CONTAINER_DIR))
 
 _INCLUDE_DIR		:= $(addprefix -I,$(_INC_TESTS_DIR) $(_CONTAINER_DIR) $(SRCS_DIR))
 
-_REQUIRED_DIR		:=  $(OBJ_DIR) $(RES_TEST_DIR) $(_RES_TEST_DIR_ALL) $(addprefix $(OBJ_DIR)/, $(SRCS_DIR) $(_CONTAINER_DIR_OBJ))
+_REQUIRED_DIR		:= $(OBJ_DIR) $(RES_TEST_DIR) $(_RES_TEST_DIR_ALL) $(addprefix $(OBJ_DIR)/, $(SRCS_DIR) $(_CONTAINER_DIR_OBJ))
 
 INC					:= $(_INC_TESTS_PATH) $(_INC_GUNNER_PATH) $(_INC_CONTAINER_PATH)
 SRCS				:= $(_SRCS_GUNNER_PATH) #$(_SRCS_CONTAINER_PATH)
@@ -78,25 +78,22 @@ all :					$(NAME)
 $(NAME) :				$(OBJS) 
 	$(CC) $< -o $@
 
-run:					$(NAME)
+run:	| $(NAME)
 	bash run_diff.sh
 
 debug :
 	echo $(foreach v, $(.VARIABLES), $(info $(v) = $($(v))))
 
-# gunner_objs/%.o :		%.cpp $(INC)
-	# echo $<
-
 gunner_objs/%.o :		%.cpp $(INC) | $(_REQUIRED_DIR)
 	$(CC) $(CFLAGS) $(_INCLUDE_DIR)  -c $< -o $@
 
-$(_REQUIRED_DIR) :
+$(_REQUIRED_DIR):
 		mkdir -p $(_REQUIRED_DIR)
 
 ################################
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) -r $(OBJ_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
