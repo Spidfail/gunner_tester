@@ -33,8 +33,8 @@ namespace ft {
 				type_value		get_collection() {
 					return _rand_collection;
 				}
-				void			init_random_collection(type_value);
-				type_value		generate( type_value, unsigned short int len = 0);
+				void			inline init_random_collection(type_value);
+				type_value		inline generate( type_value, unsigned short int len = 0);
 		};
 }
 
@@ -43,7 +43,7 @@ namespace ft {
 //
 /////////////////////////////////////////////RANDOMISATION//////////////////////////////////
 //
-template <> void			ft::Random<std::string>::init_random_collection(std::string) {
+template <> void			inline ft::Random<std::string>::init_random_collection(std::string) {
 	_rand_collection.reserve(127 - 33);
 	std::string::iterator	it = _rand_collection.begin();
 
@@ -52,11 +52,11 @@ template <> void			ft::Random<std::string>::init_random_collection(std::string) 
 	}
 }
 
-template <> void			ft::Random<int>::init_random_collection(int) {
+template <> void			inline ft::Random<int>::init_random_collection(int) {
 	_rand_collection = 100000;
 }
 
-template <> std::string		ft::Random<std::string>::generate(std::string, unsigned short int len) {
+template <> std::string		inline ft::Random<std::string>::generate(std::string, unsigned short int len) {
 	std::string		tmp;
 	std::srand(time(NULL));
 	tmp.reserve(len);
@@ -67,7 +67,7 @@ template <> std::string		ft::Random<std::string>::generate(std::string, unsigned
 	return tmp;
 }
 
-template <> int				ft::Random<int>::generate(int, unsigned short int len) {
+template <> int				inline ft::Random<int>::generate(int, unsigned short int len) {
 	(void)len;
 	std::srand(time(NULL));
 	int rand_nb = rand();

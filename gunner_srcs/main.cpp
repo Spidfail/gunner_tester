@@ -27,17 +27,21 @@ int		main(int ac, char **av) {
 	(void)av;
 	(void)ac;
 
-	ft::ITester	*test = new VectorTester<int>;
-	test->init();
-	test->get_status();
+	ft::ITester	*test_vector = new VectorTester<int>;
+	test_vector->init();
+	test_vector->get_status();
 	try {
-		test->launch_capacity();
-		test->launch_accessors();
-		test->launch_modifiers();
-		test->launch_iterators();
-		test->launch_constructor();
+		test_vector->launch_capacity();
+		test_vector->launch_accessors();
+		test_vector->launch_modifiers();
+		test_vector->launch_iterators();
+		test_vector->launch_constructor();
 	}
 	catch (std::exception &e) { std::cout << e.what() << std::endl; }
 
-	delete test;
+	
+	for (ft::ITester::iterator_exec_time 	it = test_vector->get_exec_time().begin();
+			it != test_vector->get_exec_time().end() ; it++)
+		std::cout << "EXEC TIME [" << it->first << "] = " << it->second << std::endl;
+	delete test_vector;
 }
