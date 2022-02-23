@@ -64,16 +64,17 @@ ft::Gun::reference			ft::Gun::find_bullet(const ft::Gun::name_type &bullet_name)
 ft::Gun::enlapsed_type		ft::Gun::get_velocity_average() const {
 	ft::Gun::enlapsed_type	all_vel = 0;
 	for (ft::Gun::cylinder_const_iterator it = this->begin() ; it != this->end() ; it++)
+		if ((*it)->get_velocity() != 0)
 		all_vel += (*it)->get_velocity();
-	if (all_vel == 0)
-		return 0;
-	return all_vel / this->mag_size();
+	if (all_vel != 0)
+		return all_vel / this->mag_size();
+	return 0;
 }
 
 ft::Gun::enlapsed_type		ft::Gun::get_velocity_worst() const {
-	ft::Gun::enlapsed_type	all_vel = 0;
+	ft::Gun::enlapsed_type	all_vel = std::numeric_limits<ft::Gun::enlapsed_type>::min();
 	for (ft::Gun::cylinder_const_iterator it = this->begin() ; it != this->end() ; it++)
-		if ((*it)->get_velocity() > all_vel)
+		if ((*it)->get_velocity() != 0 && (*it)->get_velocity() > all_vel)
 			all_vel = (*it)->get_velocity();
 	return all_vel;
 }
@@ -81,7 +82,7 @@ ft::Gun::enlapsed_type		ft::Gun::get_velocity_worst() const {
 ft::Gun::enlapsed_type		ft::Gun::get_velocity_best() const {
 	ft::Gun::enlapsed_type	all_vel = std::numeric_limits<double>::max();
 	for (ft::Gun::cylinder_const_iterator it = this->begin() ; it != this->end() ; it++)
-		if ((*it)->get_velocity() < all_vel && all_vel != 0)
+		if ((*it)->get_velocity() != 0 && (*it)->get_velocity() < all_vel)
 			all_vel = (*it)->get_velocity();
 	if (all_vel == std::numeric_limits<double>::max())
 		return 0;

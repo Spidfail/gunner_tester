@@ -76,6 +76,9 @@ namespace ft {
 			enlapsed_type			fire_bullet(gun_type &weapon, const name_type &bullet_name);
 			enlapsed_type			fire_bullet(gun_type &weapon, cylinder_iterator begin, cylinder_iterator last);
 
+			// Each function return 0 if the velocity is not set in all Guns.
+			// If one or more Gun has fired, the return value should be != 0.
+			// The Gun class is working the same way with his bullets.
 			enlapsed_type			get_velocity_average() const;
 			enlapsed_type			get_velocity_worst() const;
 			enlapsed_type			get_velocity_best() const;

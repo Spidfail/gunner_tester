@@ -1,8 +1,13 @@
 
-#include "AUnitTest.hpp"
 
 #ifndef AUNITTEST_CPP
 #define AUNITTEST_CPP
+
+#include "AUnitTest.hpp"
+
+ft::ABullet::ABullet() { }
+
+ft::ABullet::ABullet(bullet_const_reference source) : _path(source._path), _name(source._name), _stream(source._stream), _velocity(source._velocity) { }
 
 ft::ABullet::ABullet(const ft::ABullet::file_name_type &path, const ft::ABullet::file_name_type &name) 
  : _path(path), _name(name), _stream(NULL), _velocity(0) { }

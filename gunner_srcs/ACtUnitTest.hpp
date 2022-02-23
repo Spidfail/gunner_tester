@@ -10,13 +10,14 @@
 #include "ft_random.hpp"
 #include <../vector/Vector.hpp>
 
+
 namespace ft {
 
 	template<typename Ct>
 		class ACtBullet : ft::ABullet { };
 
-	template <typename T, typename Alloc>
-		class ACtBullet < std::vector<T, Alloc> >  : ft::ABullet {
+	template <typename T, typename Alloc >
+		class ACtBullet < std::vector<T, Alloc> > : ft::ABullet {
 
 			public:
 				typedef		T							value_type;
@@ -25,11 +26,9 @@ namespace ft {
 				typedef		ft::vector<T, Alloc>		vector_custom;
 				typedef		ft::Random<T>				random_type;
 
-			private:
-				template <typename Ct>
-				void	_tests(file_type os, T random_value, T replacement);
-
 			protected:
+				virtual void			_tests(file_type os, T random_value, T replacement) = 0;
+
 				virtual file_type		_create_file(const file_name_type &impl_id) {
 					_name.append("_vector_" + impl_id);
 					_stream = new std::ofstream(_path + _name);
@@ -42,16 +41,26 @@ namespace ft {
 				virtual enlapsed_type	launch_test() {
 					random_type		rand_generator;
 					rand_generator.init_random_collection();
-					time_point		begin_org = clock_type::now();
-					_tests<vector_original>(_create_file("std"), rand_generator.generate(), rand_generator.generate / 2);
-					enlapsed_type	time_org = duration_type(begin_org - clock_type::now()).count(); 
+					random_type		rand_value = rand_generator.generate();
+					random_type		rand_repl = rand_generator.generate() / 2;
 
-					time_point		begin_cust = clock_type::now();
-					_tests<vector_custom>(_create_file("std"), rand_generator.generate(), rand_generator.generate / 2);
-					enlapsed_type	time_cust = duration_type(begin_cust - clock_type::now()).count(); 
-					_velocity = time_org / time_cust;
+					time_point		begin_ft = clock_type::now();
+				using namespace ft;
+					_tests(_create_file("ft"), rand_value, rand_repl);
+					enlapsed_type	time_ft = duration_type(begin_ft - clock_type::now()).count(); 
+
+					time_point		begin_std = clock_type::now();
+				using namespace std;
+					_tests(_create_file("std"), rand_value, rand_repl);
+					enlapsed_type	time_std = duration_type(begin_std - clock_type::now()).count(); 
+
+					_velocity = time_std / time_ft;
+					return _velocity;
 				}
 		};
+
+	class Modifiers : ACtBullet<std::vector<int>> {
+	};
 
 	// template <typename Key, typename MappedType,
 			 // typename KeyCompare, typename Alloc>

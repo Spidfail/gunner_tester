@@ -54,6 +54,47 @@ ft::Gunner::enlapsed_type			ft::Gunner::fire_bullet(ft::Gunner::gun_type &weapon
 	return weapon.get_velocity_average();
 }
 
-ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_average() const;
-ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_worst() const;
-ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_best() const;
+ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_average() const {
+	if (_equipement.size() == 0)
+		return 0;
+	ft::Gunner::enlapsed_type	all_vel = 0;
+	ft::Gunner::size_type		nb_velocity = 0;
+	for (ft::Gunner::const_iterator it = this->begin() ; it != this->end() ; it++) {
+		ft::Gunner::enlapsed_type	tmp_vel = it->second.get_velocity_average();
+		if (tmp_vel != 0) {
+			all_vel += tmp_vel;
+			nb_velocity++;
+		}
+	}
+	if (all_vel != 0)
+		return all_vel / nb_velocity;
+	return 0;
+}
+
+ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_worst() const {
+	if (_equipement.size() == 0)
+		return 0;
+	ft::Gunner::enlapsed_type	worst_vel = std::numeric_limits<ft::Gunner::enlapsed_type>::min();
+	for (ft::Gunner::const_iterator it = this->begin() ; it != this->end() ; it++) {
+		ft::Gunner::enlapsed_type	tmp_vel = it->second.get_velocity_worst();
+		if (tmp_vel != 0 && tmp_vel > worst_vel)
+			worst_vel = tmp_vel;
+	}
+	if (worst_vel == std::numeric_limits<ft::Gunner::enlapsed_type>::min())
+		return 0;
+	return worst_vel;
+}
+
+ft::Gunner::enlapsed_type			ft::Gunner::get_velocity_best() const {
+	if (_equipement.size() == 0)
+		return 0;
+	ft::Gunner::enlapsed_type	best_vel = std::numeric_limits<ft::Gunner::enlapsed_type>::max();
+	for (ft::Gunner::const_iterator it = this->begin() ; it != this->end() ; it++) {
+		ft::Gunner::enlapsed_type	tmp_vel = it->second.get_velocity_best();
+		if (tmp_vel != 0 && tmp_vel < best_vel)
+			best_vel = tmp_vel;
+	}
+	if (best_vel == std::numeric_limits<ft::Gunner::enlapsed_type>::max())
+		return 0;
+	return best_vel;
+}

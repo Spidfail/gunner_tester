@@ -8,7 +8,6 @@
 #include <exception>
 #include <iostream>
 
-
 namespace ft {
 
 	class ABullet {
@@ -21,6 +20,7 @@ namespace ft {
 
 			typedef		ABullet												bullet_type;
 			typedef		bullet_type&										bullet_reference;
+			typedef		bullet_type&										bullet_const_reference;
 
 			typedef		double												enlapsed_type;
 			typedef		std::chrono::duration<enlapsed_type, std::milli>	duration_type;
@@ -35,7 +35,7 @@ namespace ft {
 			file_name_type				_name;
 			file_type					_stream;
 			enlapsed_type				_velocity;
-			virtual file_type			_create_file(const file_name_type &container_name, const file_name_type &impl_id) = 0;
+			virtual file_type			_create_file(const file_name_type &impl_id) = 0;
 
 		public:
 			class FailedToOpenFileException : std::exception {
@@ -48,7 +48,7 @@ namespace ft {
 
 			virtual ~ABullet();
 			ABullet(const file_name_type &path, const file_name_type &name);
-			ABullet(const ABullet &source);
+			ABullet(bullet_const_reference source);
 			void						get_status();
 			enlapsed_type				get_velocity();
 			file_type					&get_bullet();

@@ -13,9 +13,16 @@
 #ifndef VECTORACCESSORSTESTS_HPP ///////////////////////////////////////////////////////////IFNDEF
 # define VECTORACCESSORSTESTS_HPP
 
+#include "../gunner_srcs/ACtUnitTest.hpp"
+
 #include <iostream>
 
 namespace ft {
+
+		template <class Ct>
+			class BulletAccessors : ACtBullet<Ct> {
+			}
+
 
 		template <class Ct, typename Os, typename type_value>
 
