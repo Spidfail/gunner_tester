@@ -92,6 +92,7 @@ class BulletIterators : public ABullet {
 		typedef 	typename Gunner<T>::file_reference	file_reference;
 		BulletIterators() { }
 		virtual ~BulletIterators() { }
+
 		virtual void	operator() (file_reference std_file, file_reference ft_file) {
 			ft::Random<T>	random_generator;
 			random_generator.init_random_collection(T());
@@ -100,6 +101,7 @@ class BulletIterators : public ABullet {
 			test<T>(std_file, random1, random2);
 			test<T>(ft_file, random1, random2);
 		}
+
 		virtual void	operator() () {
 			test<std::vector<T>>(file_reference("/dev/null"), 0, 0);
 			test<std::vector<T>>(file_reference("/dev/null"), 0, 0); 							// PUT FT
@@ -124,6 +126,7 @@ class BulletModifiers : public ABullet {
 		typedef 	typename Gunner<T>::file_reference	file_reference;
 		BulletModifiers() { }
 		virtual ~BulletModifiers() { }
+
 		virtual void	operator() (file_reference std_file, file_reference ft_file) {
 			ft::Random<T>	random_generator;
 			random_generator.init_random_collection(T());
@@ -132,6 +135,7 @@ class BulletModifiers : public ABullet {
 			test<std::vector<T>>(std_file, random1, random2);
 			test<std::vector<T>>(ft_file, random1, random2);									// PUT FT
 		}
+
 		virtual void	operator() () {
 			test<std::vector<T>>(file_reference("/dev/null"), 0, 0);
 			test<std::vector<T>>(file_reference("/dev/null"), 0, 0); 							// PUT FT
@@ -148,4 +152,3 @@ class BulletModifiers : public ABullet {
 
 
 #endif
-
