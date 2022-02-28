@@ -14,17 +14,18 @@
 # define VECTORMODIFIERSTESTS_HPP
 
 # include <iostream>
-# include "VectorTesterUtils.hpp"
+# include "../../gunner_srcs/NEWGunner.hpp"
+# include "../../../vector/Vector.hpp"
 
 namespace ft {
 
-	template <class Ct, typename Os, typename type_value>
+	template <class Ct, typename type_value>
 		struct UnitestModifiers {
 
-			typedef typename Ct::size_type				size_type;
-			typedef typename ft::TesterUtils<Ct, Os>	tester_utils;
+			typedef typename Ct::size_type						size_type;
+			typedef typename Gunner<type_value>::file_reference	stream_type;
 
-			static void					assign(Os &os, type_value random_value, type_value replacement) {
+			static void					assign(stream_type &os, type_value random_value, type_value replacement) {
 				os << "ASSIGN" << std::endl;
 				{
 					Ct	vec;
@@ -79,7 +80,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void					clear(Os &os, type_value random_value, type_value replacement) {
+			static void					clear(stream_type &os, type_value random_value, type_value replacement) {
 				os << "CLEAR" << std::endl;
 				Ct	vecfill(10, random_value);
 				os << vecfill.capacity() << " ";
@@ -96,7 +97,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void					insert(Os &os, type_value random_value, type_value replacement) {
+			static void					insert(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					os << "INSERT" << std::endl;
 					Ct vecfill(10, random_value);
@@ -193,7 +194,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void					push_back(Os &os, type_value random_value, type_value replacement) {
+			static void					push_back(stream_type &os, type_value random_value, type_value replacement) {
 				size_type	max_size;
 				{
 					Ct	vec;
@@ -214,7 +215,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void					pop_back(Os &os, type_value random_value, type_value replacement) {
+			static void					pop_back(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(10, random_value);
 					for ( ; vecfill.size() ; vecfill.pop_back() ) {
@@ -232,7 +233,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void					resize(Os &os, type_value random_value, type_value replacement) {
+			static void					resize(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(10, random_value);
 					vecfill.resize(10);
@@ -268,33 +269,39 @@ namespace ft {
 				}
 			}
 
-			static void					swap(Os &os, type_value random_value, type_value replacement) {
+			static void					swap(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct vecfill(10, random_value);
 					Ct vecfill_other(10, replacement);
 					vecfill.swap(vecfill_other);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 					std::swap(vecfill_other, vecfill);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 				} {
 					Ct vecfill(10, random_value);
 					Ct vecfill_other(20, replacement);
 					vecfill.swap(vecfill_other);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 					std::swap(vecfill_other, vecfill);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 				} {
 					Ct vecfill(30, random_value);
 					Ct vecfill_other(20, replacement);
 					vecfill.swap(vecfill_other);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 					std::swap(vecfill_other, vecfill);
-					tester_utils::print_content(os, vecfill);
+					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; ++it)
+						os << *it << " ";
 				}
 				os << std::endl;
 			}
 
-			static void					erase(Os &os, type_value random_value, type_value replacement) {
+			static void					erase(stream_type &os, type_value random_value, type_value replacement) {
 				os << " ERASE " << std::endl;
 				{
 					Ct	vecfill(20, random_value);
@@ -362,6 +369,45 @@ namespace ft {
 					os << std::endl;
 				}
 			}
+		};
+
+	template <typename T>
+		class BulletModifiers : public ABullet {
+			private:
+				const BulletModifiers	&operator=(const BulletModifiers &) { return *this; }
+				BulletModifiers(const BulletModifiers &) { }
+			public:
+				typedef 	typename Gunner<T>::file_type  		file_type;
+				typedef 	typename Gunner<T>::file_reference	file_reference;
+				BulletModifiers() { }
+				virtual ~BulletModifiers() { }
+
+				virtual void	operator() (file_reference std_file, file_reference ft_file) {
+					ft::Random<T>	random_generator;
+					random_generator.init_random_collection(T());
+					T random1 = random_generator.generate(T());
+					T random2 = random_generator.generate(T()) / 2;
+					test<std::vector<T>>(std_file, random1, random2);
+					test<ft::vector<T>>(ft_file, random1, random2);
+				}
+
+				virtual void	operator() () {
+					test<std::vector<T>>(std::cout, 0, 0);
+					test<ft::vector<T>>(std::cout, 0, 0); 				// PUT FT
+				}
+
+				template <class Ct>
+					void	test(file_reference os, T random1, T random2) {
+						UnitestModifiers<Ct, T>		instance_test;
+						instance_test.assign(os, random1, random2);
+						instance_test.clear(os, random1, random2);
+						instance_test.insert(os, random1, random2);
+						instance_test.push_back(os, random1, random2);
+						instance_test.pop_back(os, random1, random2);
+						instance_test.resize(os, random1, random2);
+						instance_test.swap(os, random1, random2);
+						instance_test.erase(os, random1, random2);
+					}
 		};
 
 }

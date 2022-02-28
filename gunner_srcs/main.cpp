@@ -10,38 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <memory>
-#include <algorithm>
-#include "Vector.hpp"
-#include "VectorTester.hpp"
-#include "ITester.hpp"
-#include "IteratorVector.hpp"
-#include "IsIntegral.hpp"
-#include <typeinfo>
+#include "NEWGunner.hpp"
+#include "../tests/vector/VectorIteratorsTests.hpp"
+#include "../tests/vector/VectorModifiersTests.hpp"
+#include "../tests/vector/VectorAccessorsTests.hpp"
+#include "../tests/vector/VectorConstructorTests.hpp"
+#include "../tests/vector/VectorCapacityTests.hpp"
 
-int		main(int ac, char **av) {
-
-	(void)av;
-	(void)ac;
-
-	ft::ITester	*test_vector = new VectorTester<int>;
-	test_vector->init();
-	test_vector->get_status();
-	try {
-		test_vector->launch_capacity();
-		test_vector->launch_accessors();
-		test_vector->launch_modifiers();
-		test_vector->launch_iterators();
-		test_vector->launch_constructor();
+int	main(int ac, char **av) {
+	if (ac != 3) {
+		std::cerr << "[ERROR] arguments required : [std result ouput directory] [ft result ouput directory]" << std::endl;
+		return 1;
 	}
-	catch (std::exception &e) { std::cout << e.what() << std::endl; }
-
-	
-	for (ft::ITester::iterator_exec_time 	it = test_vector->get_exec_time().begin();
-			it != test_vector->get_exec_time().end() ; it++)
-		std::cout << "EXEC TIME [" << it->first << "] = " << it->second << std::endl;
-	delete test_vector;
+	Gunner<int> 	silvector_stalone;
+	std::string		path_std(av[1]);
+	std::string		path_ft(av[2]);
+	if (path_ft.find_last_of("/") == path_ft.npos || path_ft.find_last_of("/") != path_ft.size() - 1)
+		path_ft.append("/");
+	if (path_std.find_last_of("/") == path_ft.npos || path_std.find_last_of("/") != path_std.size() - 1)
+		path_std.append("/");
+	silvector_stalone.add_bullet<ft::BulletConstructor<int>> (path_std + "vector_constructor", path_ft + "vector_constructor");
+	silvector_stalone.add_bullet<ft::BulletAccessors<int>> (path_std + "vector_accessors", path_ft + "vector_accessors");
+	silvector_stalone.add_bullet<ft::BulletCapacity<int>> (path_std + "vector_capacity", path_ft + "vector_capacity");
+	silvector_stalone.add_bullet<ft::BulletModifiers<int>> (path_std + "vector_modifiers", path_ft + "vector_modifiers");
+	silvector_stalone.add_bullet<ft::BulletIterators<int>> (path_std + "vector_iterators", path_ft + "vector_iterators");
+	silvector_stalone.fire_all();
 }

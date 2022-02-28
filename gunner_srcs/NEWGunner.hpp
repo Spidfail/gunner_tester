@@ -12,7 +12,7 @@ class ABullet {
 		const ABullet	&operator=(const ABullet &) { return *this; }
 	public:
 		ABullet() { }
-		virtual void operator() (std::ofstream &std_os, std::ofstream &ft_os) = 0;
+		virtual void operator() (std::ostream &std_os, std::ostream &ft_os) = 0;
 		virtual void operator() () = 0;
 		virtual ~ABullet() { }
 };
@@ -25,8 +25,8 @@ class Gunner {
 		typedef 	double												elapsed_type;
 		typedef 	std::string											name_type;
 		typedef 	std::string											name_const_reference;
-		typedef 	std::ofstream										file_type;
-		typedef 	std::ofstream&										file_reference;
+		typedef 	std::ostream										file_type;
+		typedef 	std::ostream&										file_reference;
 
 		typedef		std::chrono::duration<elapsed_type, std::milli>		duration_type;
 		typedef		std::chrono::steady_clock::time_point				time_point;
@@ -63,8 +63,12 @@ class Gunner {
 			{
 				Gun_entry *entry = &ammo[i];
 				entry->number_of_times_tested = 1000;
-				std::ofstream std_os (entry->std_filename);
-				std::ofstream ft_os (entry->ft_filename);
+				std::filebuf	std_fbuff;
+				std::filebuf	ft_fbuff;
+				std_fbuff.open(entry->std_filename.c_str(), std::ios_base::out);
+				ft_fbuff.open(entry->ft_filename.c_str(), std::ios_base::out);
+				std::ostream 	std_os (&std_fbuff);
+				std::ostream 	ft_os (&ft_fbuff);
 				(*entry->test) (std_os, ft_os);
 
 				for (size_type j = 0; j < entry->number_of_times_tested; ++j )
@@ -81,74 +85,5 @@ class Gunner {
 			}
 		}
 };
-
-template <typename T>
-class BulletIterators : public ABullet {
-	private:
-		const BulletIterators	&operator=(const BulletIterators &) { return *this; }
-		BulletIterators(const BulletIterators &) { }
-	public:
-		typedef 	typename Gunner<T>::file_type  		file_type;
-		typedef 	typename Gunner<T>::file_reference	file_reference;
-		BulletIterators() { }
-		virtual ~BulletIterators() { }
-
-		virtual void	operator() (file_reference std_file, file_reference ft_file) {
-			ft::Random<T>	random_generator;
-			random_generator.init_random_collection(T());
-			T random1 = random_generator.generate(T());
-			T random2 = random_generator.generate(T()) / 2;
-			test<T>(std_file, random1, random2);
-			test<T>(ft_file, random1, random2);
-		}
-
-		virtual void	operator() () {
-			test<std::vector<T>>(file_reference("/dev/null"), 0, 0);
-			test<std::vector<T>>(file_reference("/dev/null"), 0, 0); 							// PUT FT
-		}
-
-		template <class Ct>
-			void	test(file_reference os, T random1, T random2) {
-				(void)os;
-				(void)random1;
-				(void)random2;
-				std::cout << " FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF " << std::endl;
-			}
-};
-
-template <typename T>
-class BulletModifiers : public ABullet {
-	private:
-		const BulletModifiers	&operator=(const BulletModifiers &) { return *this; }
-		BulletModifiers(const BulletModifiers &) { }
-	public:
-		typedef 	typename Gunner<T>::file_type  		file_type;
-		typedef 	typename Gunner<T>::file_reference	file_reference;
-		BulletModifiers() { }
-		virtual ~BulletModifiers() { }
-
-		virtual void	operator() (file_reference std_file, file_reference ft_file) {
-			ft::Random<T>	random_generator;
-			random_generator.init_random_collection(T());
-			T random1 = random_generator.generate(T());
-			T random2 = random_generator.generate(T()) / 2;
-			test<std::vector<T>>(std_file, random1, random2);
-			test<std::vector<T>>(ft_file, random1, random2);									// PUT FT
-		}
-
-		virtual void	operator() () {
-			test<std::vector<T>>(file_reference("/dev/null"), 0, 0);
-			test<std::vector<T>>(file_reference("/dev/null"), 0, 0); 							// PUT FT
-		}
-
-		template <class Ct>
-			void	test(file_reference os, T random1, T random2) {
-				(void)os;
-				(void)random1;
-				(void)random2;
-				std::cout << " LLLLLLLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOLLLLLLLLLLL " << std::endl;
-			}
-};
-
 
 #endif

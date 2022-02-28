@@ -10,17 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#ifndef VECTORCONSTRUCTORTESTS_HPP ////////////////////////////////////////////////////////////////// IFNDEF
+# define VECTORCONSTRUCTORTESTS_HPP
+
+# include <iostream>
+# include "../../gunner_srcs/NEWGunner.hpp"
+# include "../../../vector/Vector.hpp"
 
 namespace ft {
 
-		template <class Ct, typename Os, typename T>
+		template <class Ct, typename T>
 		struct UnitestConstructor {
 
-			typedef	typename	Ct::size_type	size_type;
-			typedef				T				type_value;
+			typedef	typename	Ct::size_type						size_type;
+			typedef				T									type_value;
+			typedef typename 	Gunner<type_value>::file_reference	stream_type;
 
-				static void				vector_fill(Os &os, type_value random_value) {
+				static void				vector_fill(stream_type &os, type_value random_value) {
 					{
 						Ct	vecfill(20, random_value);
 						os << vecfill.size() << std::endl;
@@ -42,7 +48,7 @@ namespace ft {
 					}
 				}
 
-				static void				vector_range(Os &os, type_value random_value) {
+				static void				vector_range(stream_type &os, type_value random_value) {
 					{
 						Ct	vectill(20, random_value);
 						Ct	vecrange(vectill.begin(), vectill.end());
@@ -70,7 +76,7 @@ namespace ft {
 					} 
 				}
 
-				static void				operator_assignation(Os &os, type_value random_value) {
+				static void				operator_assignation(stream_type &os, type_value random_value) {
 					{
 						Ct	vecfill(20, random_value);
 						Ct	vec;
@@ -86,7 +92,7 @@ namespace ft {
 					}
 				}
 
-				static void				operator_comparison(Os &os, type_value random_value, type_value replacement) {
+				static void				operator_comparison(stream_type &os, type_value random_value, type_value replacement) {
 					(void)replacement;
 					os << "------------------------------------------------------" << std::endl;
 					os << " Values : random = " << random_value << ", replacement = " << replacement << std::endl;
@@ -313,4 +319,41 @@ namespace ft {
 					}
 				}
 		};
+
+	template <typename T>
+		class BulletConstructor : public ABullet {
+			private:
+				const BulletConstructor	&operator=(const BulletConstructor &) { return *this; }
+				BulletConstructor(const BulletConstructor &) { }
+			public:
+				typedef 	typename Gunner<T>::file_type  		file_type;
+				typedef 	typename Gunner<T>::file_reference	file_reference;
+				BulletConstructor() { }
+				virtual ~BulletConstructor() { }
+
+				virtual void	operator() (file_reference std_file, file_reference ft_file) {
+					ft::Random<T>	random_generator;
+					random_generator.init_random_collection(T());
+					T random1 = random_generator.generate(T());
+					T random2 = random_generator.generate(T()) / 2;
+					test<std::vector<T>>(std_file, random1, random2);
+					test<ft::vector<T>>(ft_file, random1, random2);
+				}
+
+				virtual void	operator() () {
+					test<std::vector<T>>(std::cout, 0, 0);
+					test<ft::vector<T>>(std::cout, 0, 0); 				// PUT FT
+				}
+
+				template <class Ct>
+					void	test(file_reference os, T random1, T random2) {
+						UnitestConstructor<Ct, T>		instance_test;
+						instance_test.vector_fill(os, random1);
+						instance_test.vector_range(os, random1);
+						instance_test.operator_assignation(os, random1);
+						instance_test.operator_comparison(os, random1, random2);
+					}
+		};
 }
+
+#endif

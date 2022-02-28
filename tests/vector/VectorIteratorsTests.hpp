@@ -14,15 +14,19 @@
 # define VECTORITERATORSTESTS_HPP
 
 #include <iostream>
+#include <cstdio>
+#include "../../gunner_srcs/NEWGunner.hpp"
+#include "../../../vector/Vector.hpp"
 
 namespace ft {
 
-		template <class Ct, typename Os, typename type_value>
+		template <class Ct, typename type_value>
 		struct UnitestIterators {
 
-			typedef typename Ct::size_type	size_type;
+			typedef typename Ct::size_type						size_type;
+			typedef typename Gunner<type_value>::file_reference	stream_type;
 
-			static void		constructors(Os &os, type_value random_value, type_value replacement) {
+			static void		constructors(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(10, random_value);
 					typename Ct::iterator it;
@@ -45,7 +49,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		accessors(Os &os, type_value random_value, type_value replacement) {
+			static void		accessors(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(1, random_value);
 					vecfill.push_back(replacement);
@@ -72,7 +76,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		increment_decrement(Os &os, type_value random_value, type_value replacement) {
+			static void		increment_decrement(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(10, random_value);
 					for (typename Ct::iterator it = vecfill.begin() ; it != vecfill.end() ; it++) {
@@ -125,7 +129,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		comparison(Os &os, type_value random_value, type_value replacement) {
+			static void		comparison(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(10, random_value);
 					for (typename Ct::iterator it = vecfill.begin(), it2 = it ; it != vecfill.end() && (it == it2) ; it++, it2++) {
@@ -168,7 +172,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		arithmetic(Os &os, type_value random_value, type_value replacement) {
+			static void		arithmetic(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(20, random_value);
 					typename Ct::iterator	it = vecfill.begin();
@@ -209,7 +213,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		assignation(Os &os, type_value random_value, type_value replacement) {
+			static void		assignation(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vecfill(21, random_value);
 					typename Ct::iterator	it = vecfill.begin();
@@ -234,7 +238,7 @@ namespace ft {
 				os << std::endl;
 			}
 
-			static void		methods(Os &os, type_value random_value, type_value replacement) {
+			static void		methods(stream_type &os, type_value random_value, type_value replacement) {
 				{
 					Ct	vec;
 					vec.push_back(random_value);
@@ -269,6 +273,45 @@ namespace ft {
 				}
 			}
 		};
+
+	template <typename T>
+		class BulletIterators : public ABullet {
+			private:
+				const BulletIterators	&operator=(const BulletIterators &) { return *this; }
+				BulletIterators(const BulletIterators &) { }
+			public:
+				typedef 	typename Gunner<T>::file_type  		file_type;
+				typedef 	typename Gunner<T>::file_reference	file_reference;
+				BulletIterators() { }
+				virtual ~BulletIterators() { }
+
+				virtual void	operator() (file_reference std_file, file_reference ft_file) {
+					ft::Random<T>	random_generator;
+					random_generator.init_random_collection(T());
+					T random1 = random_generator.generate(T());
+					T random2 = random_generator.generate(T()) / 2;
+					test<std::vector<T>>(std_file, random1, random2);
+					test<ft::vector<T>>(ft_file, random1, random2);
+				}
+
+				virtual void	operator() () {
+					test<std::vector<T>>(std::cout, 0, 0);
+					test<ft::vector<T>>(std::cout, 0, 0); 				// PUT FT
+				}
+
+				template <class Ct>
+					void	test(file_reference os, T random1, T random2) {
+						UnitestIterators<Ct, T>		iterator_test;
+						iterator_test.constructors(os, random1, random2);
+						iterator_test.accessors(os, random1, random2);
+						iterator_test.increment_decrement(os, random1, random2);
+						iterator_test.comparison(os, random1, random2);
+						iterator_test.arithmetic(os, random1, random2);
+						iterator_test.assignation(os, random1, random2);
+						iterator_test.methods(os, random1, random2);
+					}
+		};
+
 }
 
 #endif ////////////////////////////////////////////////////////////////////////////////////////// ENDIF

@@ -11,9 +11,7 @@
 # **************************************************************************** #
 
 _SRCS_GUNNER 		:= main.cpp
-_INC_GUNNER			:= VectorTester.hpp \
-					   VectorTesterUtils.hpp \
-					   ITester.hpp \
+_INC_GUNNER			:= NEWGunner.hpp \
 					   IsStd.hpp \
 					   ft_random.hpp 
 
