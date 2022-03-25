@@ -138,6 +138,12 @@ namespace ft {
 						os << *it << " " << (it != it2) << " "; }
 				} {
 					Ct	vecfill(10, random_value);
+					for (typename Ct::iterator it = vecfill.begin(), it2 = it ; it != vecfill.end() && (it == it2) ; it++, it2++) {
+						os << *it << " "; *it = replacement; os << (it == it2) << " "; }
+					for (typename Ct::const_iterator it = vecfill.begin(), it2 = it + 1 ; it != vecfill.end() && it != it2 ; it++, it2++) {
+						os << *it << " " << (it != it2) << " "; }
+				} {
+					Ct	vecfill(10, random_value);
 					for (typename Ct::iterator it = vecfill.begin() ; it < vecfill.end() ; it++)
 						os << *it << " ";
 				} {
@@ -272,6 +278,58 @@ namespace ft {
 					}
 				}
 			}
+
+			static void		cast_iterators(stream_type	&os, type_value random_value, type_value replacement) {
+				typedef		typename Ct::iterator				iterator;
+				typedef		typename Ct::const_iterator			const_iterator;
+				typedef		typename Ct::reverse_iterator		reverse_iterator;
+				typedef		typename Ct::const_reverse_iterator	const_reverse_iterator;
+				{ // It tests : instanciation of const_iterator and comparison const/non_const
+					Ct	vecfill(10, random_value);
+					iterator			it_beg = vecfill.begin();
+					iterator			it_end = vecfill.end();
+					const_iterator		it_beg_const = vecfill.begin();
+					const_iterator		it_end_const = vecfill.end();
+					while (it_beg_const != it_end_const
+							&& it_beg != it_end) {
+						os << *it_beg_const << " ";
+						++it_beg_const;
+						++it_beg;
+					}
+					os << std::endl;
+				} { // Tests : same as before but with reverse_iterator
+					Ct	vecfill(10, random_value);
+					reverse_iterator			it_beg = vecfill.rbegin();
+					reverse_iterator			it_end = vecfill.rend();
+					const_reverse_iterator		it_beg_const = vecfill.rbegin();
+					const_reverse_iterator		it_end_const = vecfill.rend();
+					while (it_beg_const != it_end_const
+							&& it_beg != it_end) {
+						os << *it_beg_const << " ";
+						++it_beg_const;
+						++it_beg;
+					}
+					os << std::endl;
+				} { // Tests : operator=() from const_it to iterator + comparison const/non_const
+					Ct	vecfill(10, random_value);
+					Ct	vecfill_replace(10, replacement);
+					iterator	it	= vecfill.begin();
+					for (const_iterator it_const = vecfill.begin() ; it_const != vecfill.end() ; ++it_const) {
+						os << *it << " ";
+						*it = *it_const;
+						os << *it << " ";
+					}
+				} { // Tests : same as before but with reverse_iterator
+					Ct	vecfill(10, random_value);
+					Ct	vecfill_replace(10, replacement);
+					reverse_iterator	it	= vecfill.rbegin();
+					for (const_reverse_iterator it_const = vecfill.rbegin() ; it_const != vecfill.rend() ; ++it_const) {
+						os << *it << " ";
+						*it = *it_const;
+						os << *it << " ";
+					}
+				}
+			}
 		};
 
 	template <typename T>
@@ -282,7 +340,10 @@ namespace ft {
 			public:
 				typedef 	typename Gunner<T>::file_type  		file_type;
 				typedef 	typename Gunner<T>::file_reference	file_reference;
-				BulletIterators() { }
+				BulletIterators() {
+					min_diff_time = std::numeric_limits<T>::max();
+					max_diff_time = std::numeric_limits<T>::min();
+				}
 				virtual ~BulletIterators() { }
 
 				virtual void	operator() (file_reference std_file, file_reference ft_file) {
@@ -290,13 +351,30 @@ namespace ft {
 					random_generator.init_random_collection(T());
 					T random1 = random_generator.generate(T());
 					T random2 = random_generator.generate(T()) / 2;
-					test<std::vector<T>>(std_file, random1, random2);
-					test<ft::vector<T>>(ft_file, random1, random2);
+					test<std::vector<T> >(std_file, random1, random2);
+					test<ft::vector<T> >(ft_file, random1, random2);
 				}
 
 				virtual void	operator() () {
-					test<std::vector<T>>(std::cout, 0, 0);
-					test<ft::vector<T>>(std::cout, 0, 0); 				// PUT FT
+					ft::Random<T>	random_generator;
+					random_generator.init_random_collection(T());
+					T random1 = random_generator.generate(T());
+					T random2 = random_generator.generate(T());
+
+					time_point start_time_std = clock_type::now();
+					test<std::vector<T> >(std::cout, random1, random2);
+					time_point end_time_std = clock_type::now();
+
+					time_point start_time_ft = clock_type::now();
+					test<ft::vector<T> >(std::cout, random1, random2);
+					time_point end_time_ft = clock_type::now();
+
+					elapsed_type span_time = duration_type(end_time_ft - start_time_ft).count() / duration_type(end_time_std - start_time_std).count();
+					total_time += duration_type(end_time_ft - start_time_ft).count();
+					if (span_time < this->min_diff_time)
+						this->min_diff_time = span_time;
+					else if (span_time > this->max_diff_time)
+						this->max_diff_time = span_time;
 				}
 
 				template <class Ct>
@@ -309,6 +387,7 @@ namespace ft {
 						iterator_test.arithmetic(os, random1, random2);
 						iterator_test.assignation(os, random1, random2);
 						iterator_test.methods(os, random1, random2);
+						iterator_test.cast_iterators(os, random1, random2);
 					}
 		};
 

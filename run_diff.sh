@@ -22,7 +22,7 @@ test_diff() {
 	fi
 }
 
-./gunner_container $_results_std $_results_ft 1> /dev/null
+./gunner_container $_results_std $_results_ft > /dev/null
 
 array_ft=($(ls -d "$_results_ft"/*))
 array_std=($(ls -d "$_results_std"/*))

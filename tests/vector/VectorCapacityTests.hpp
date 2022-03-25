@@ -99,20 +99,39 @@ namespace ft {
 			public:
 				typedef 	typename Gunner<T>::file_type  		file_type;
 				typedef 	typename Gunner<T>::file_reference	file_reference;
-				BulletCapacity() { }
+				BulletCapacity() {
+					min_diff_time = std::numeric_limits<T>::max();
+					max_diff_time = std::numeric_limits<T>::min();
+				}
 				virtual ~BulletCapacity() { }
 
 				virtual void	operator() (file_reference std_file, file_reference ft_file) {
 					ft::Random<T>	random_generator;
 					random_generator.init_random_collection(T());
 					T random1 = random_generator.generate(T());
-					test<std::vector<T>>(std_file, random1);
-					test<ft::vector<T>>(ft_file, random1);
+					test<std::vector<T> >(std_file, random1);
+					test<ft::vector<T> >(ft_file, random1);
 				}
 
 				virtual void	operator() () {
-					test<std::vector<T>>(std::cout, 0);
-					test<ft::vector<T>>(std::cout, 0); 				// PUT FT
+					ft::Random<T>	random_generator;
+					random_generator.init_random_collection(T());
+					T random1 = random_generator.generate(T());
+
+					time_point start_time_std = clock_type::now();
+					test<std::vector<T> >(std::cout, random1);
+					time_point end_time_std = clock_type::now();
+
+					time_point start_time_ft = clock_type::now();
+					test<ft::vector<T> >(std::cout, random1);
+					time_point end_time_ft = clock_type::now();
+
+					elapsed_type span_time = duration_type(end_time_ft - start_time_ft).count() / duration_type(end_time_std - start_time_std).count();
+					total_time += duration_type(end_time_ft - start_time_ft).count();
+					if (span_time < this->min_diff_time)
+						this->min_diff_time = span_time;
+					else if (span_time > this->max_diff_time)
+						this->max_diff_time = span_time;
 				}
 
 				template <class Ct>

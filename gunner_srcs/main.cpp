@@ -29,10 +29,12 @@ int	main(int ac, char **av) {
 		path_ft.append("/");
 	if (path_std.find_last_of("/") == path_ft.npos || path_std.find_last_of("/") != path_std.size() - 1)
 		path_std.append("/");
-	silvector_stalone.add_bullet<ft::BulletConstructor<int>> (path_std + "vector_constructor", path_ft + "vector_constructor");
-	silvector_stalone.add_bullet<ft::BulletAccessors<int>> (path_std + "vector_accessors", path_ft + "vector_accessors");
-	silvector_stalone.add_bullet<ft::BulletCapacity<int>> (path_std + "vector_capacity", path_ft + "vector_capacity");
-	silvector_stalone.add_bullet<ft::BulletModifiers<int>> (path_std + "vector_modifiers", path_ft + "vector_modifiers");
-	silvector_stalone.add_bullet<ft::BulletIterators<int>> (path_std + "vector_iterators", path_ft + "vector_iterators");
-	silvector_stalone.fire_all();
+	silvector_stalone.add_bullet<ft::BulletConstructor<int> > (path_std + "vector_constructor", path_ft + "vector_constructor");
+	silvector_stalone.add_bullet<ft::BulletAccessors<int> > (path_std + "vector_accessors", path_ft + "vector_accessors");
+	silvector_stalone.add_bullet<ft::BulletCapacity<int> > (path_std + "vector_capacity", path_ft + "vector_capacity");
+	silvector_stalone.add_bullet<ft::BulletModifiers<int> > (path_std + "vector_modifiers", path_ft + "vector_modifiers");
+	silvector_stalone.add_bullet<ft::BulletIterators<int> > (path_std + "vector_iterators", path_ft + "vector_iterators");
+	silvector_stalone.fire();
+	silvector_stalone.fire_bench(1000);
+	silvector_stalone.get_bench();
 }

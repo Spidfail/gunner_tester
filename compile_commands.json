@@ -1,6 +1,6 @@
 [
  {
-  "directory": "/Users/guhernan/Documents/GitHub/ft_container/gunner_container", 
+  "directory": "/Users/guhernan/Documents/GitHub/ft_container/gunner_tester", 
   "arguments": [
    "clang++", 
    "-Wall", 

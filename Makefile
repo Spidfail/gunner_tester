@@ -12,7 +12,8 @@
 
 NAME				:= gunner_container
 CC					:= clang++
-CFLAGS				:= -Wall -Wextra -Werror -O2
+CSAN				:= -fsanitize=address -g3
+CFLAGS				:= -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR				:= gunner_objs
 SRCS_DIR			:= gunner_srcs
