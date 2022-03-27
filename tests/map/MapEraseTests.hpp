@@ -6,33 +6,38 @@
 # include "../../gunner_srcs/NEWGunner.hpp"
 # include "../../../map/Map.hpp"
 # include <map>
+# include "../Pair.hpp"
 # include <algorithm>
 
 namespace ft {
 
-		template <class Ct, typename T>
+		template <class Ct, typename Key, typename Mapped, typename MakePair>
 			struct UnitestMapErase {
 
 				typedef	typename	Ct::size_type						size_type;
-				typedef				T									type_value;
-				typedef typename 	Gunner<type_value>::file_reference	stream_type;
+				typedef				Key									key_type;
+				typedef				Mapped								mapped_type;
+				typedef				std::vector<key_type>				vector_type;
+				typedef typename 	Gunner<key_type, mapped_type>::file_reference	stream_type;
 
-				static void				erase_random_tree(stream_type &os, std::vector<int> &vec_values) {
+				static void				erase_random_tree(stream_type &os, vector_type &vec_values) {
 					std::cout << "////////////// TEST WITH RANDOM TREE : SHUFFLED RANGE [1 - 20]" << std::endl;
 					Ct			test;
-					std::map<int, std::string>			test_off;
 
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
 						os << *it << " ";
 					}
 
-					// ft::vector<int>::iterator	it = vec_values.begin();
-
 					os << std::endl;
-					for (std::vector<int>::iterator it = vec_values.begin() ;
+					for (typename vector_type::iterator it = vec_values.begin() ;
 							it != vec_values.end() ; ++it) {
 						os << " ## Erase : " << *it << std::endl;
 						test.erase(*it);
+						// os.flush();
+						// os << "RANGE = ";
+						// for (typename Ct::iterator it = test.begin() ; it != test.end() ; ++it) {
+							// os << it->first << " ";
+						// }
 # ifdef DEBUG
 						os << " IS VALID ? " << test._is_valid() << std::endl << std::endl;
 # endif
@@ -40,7 +45,7 @@ namespace ft {
 					os << std::endl;
 				}
 
-				static void				erase_safe_iterator_1(stream_type &os, std::vector<int> &vec_values, int nb_safe) {
+				static void				erase_safe_iterator_1(stream_type &os, vector_type &vec_values, key_type nb_safe, MakePair mp) {
 
 					os << std::endl << "//////////// TEST ERASE AND ITERATOR - Define tree - Print" << std::endl;
 					os << std::endl;
@@ -48,13 +53,13 @@ namespace ft {
 
 
 					os << " RANGE = ";
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
 						os << *it << " ";
 					}
 					os << std::endl;
 
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
-						test.insert(ft::make_pair(*it, "manger des chips"));
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+						test.insert(mp(*it, "manger des chips"));
 					}
 # ifdef DEBUG
 					os << " IS VALID ? : " <<  test._is_valid() << std::endl;
@@ -66,10 +71,10 @@ namespace ft {
 					while (safe_it->first != nb_safe)
 						++safe_it;
 
-					os << " ERASE RANGE, EXCEPT :" << nb_safe << ", with address = " << &(*safe_it) << std::endl;
+					os << " ERASE RANGE, EXCEPT :" << nb_safe << std::endl;
 
 					// TEST
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
 						if (*it != nb_safe) {
 							os << "----Erase : " << *it << std::endl;
 							test.erase(*it);
@@ -99,15 +104,15 @@ namespace ft {
 					os << std::endl;
 				}
 
-				static void				erase_random(stream_type &os, std::vector<int> &vec_values, int nb_safe) {
+				static void				erase_random(stream_type &os, vector_type &vec_values, key_type nb_safe, MakePair mp) {
 					// Same test 
 					os << std::endl << "//////////// TEST ERASE AND ITERATOR - Random & Print" << std::endl;
 					os << std::endl;
 					Ct			test;
 
 
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
-						test.insert(ft::make_pair(*it, "manger des chips"));
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+						test.insert(mp(*it, "manger des chips"));
 						// print_content(test, false);
 					}
 # ifdef DEBUG
@@ -121,10 +126,10 @@ namespace ft {
 					while (safe_it->first != nb_safe)
 						++safe_it;
 
-					os << " ERASE, EXCEPT :" << nb_safe << ", with address = " << &(*safe_it) << std::endl;
+					os << " ERASE, EXCEPT :" << nb_safe << std::endl;
 
 					// TEST
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
 						if (*it != nb_safe) {
 							os << "----Erase : " << *it << std::endl;
 							test.erase(*it);
@@ -149,14 +154,14 @@ namespace ft {
 					os << std::endl;
 				}
 
-				static void				erase_random_range_2(stream_type &os, std::vector<int> &vec_values, int nb_safe) {
+				static void				erase_random_range_2(stream_type &os, vector_type &vec_values, key_type nb_safe, MakePair mp) {
 					os << std::endl << "//////////// TEST ERASE RANGE AND ITERATOR - Random Range !" << std::endl;
 					os << std::endl;
 					Ct			test;
 					// Insert range, print content, check if the tree is balanced, print tree.
 					os << "   RANGE INSERTED : ";
-					for (std::vector<int>::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
-						test.insert(ft::make_pair(*it, "manger des chips"));
+					for (typename vector_type::iterator it = vec_values.begin() ; it != vec_values.end() ; ++it) {
+						test.insert(mp(*it, "manger des chips"));
 						// print_content(test, false);
 					}
 					for (typename Ct::iterator it = test.begin() ;
@@ -173,7 +178,7 @@ namespace ft {
 						++safe_it;
 
 
-					os << " ERASE, EXCEPT :" << nb_safe << ", with address = " << &(*safe_it) << std::endl;
+					os << " ERASE, EXCEPT :" << nb_safe << std::endl;
 
 					os << "-----Range to erase : ";
 					for (typename Ct::iterator it = test.begin() ; it != safe_it ; ++it)
@@ -232,6 +237,7 @@ namespace ft {
 					const BulletMapErase	&operator=(const BulletMapErase &) { return *this; }
 					BulletMapErase(const BulletMapErase &) { }
 				public:
+					typedef				std::vector<Key>				vector_type;
 					typedef 	typename Gunner<Key>::file_type  		file_type;
 					typedef 	typename Gunner<Key>::file_reference	file_reference;
 					BulletMapErase() {
@@ -242,52 +248,41 @@ namespace ft {
 
 					virtual void	operator() (file_reference std_file, file_reference ft_file) {
 						std::srand(time(NULL));
+						vector_type						vec_values;
 						// Construction of random vector
-						std::vector<int>						vec_values;
-						for (int i = 1 ; i < 30 ; ++i) {
-							int	new_nb = rand() % 20 + 1;
+						ft::Random<Key>		random_generator;
+						random_generator.init_random_collection(Key());
+
+						for (int i = 1 ; i < 150 ; ++i) {
+							Key	new_nb = random_generator.generate(Key());
 							vec_values.push_back(new_nb);
 						}
-						int	nb_safe = vec_values[rand() % 29];
-						std::random_shuffle(vec_values.begin(), vec_values.end());
+						Key	value_safe = vec_values[rand() % 149];
 
-						int	array[] = {8, 2, 10, 16, 5, 15, 17, 1, 6, 9};
-						// Create an vector from a static array.
-						// The called constructor use 'array' pointers to instantiate template,
-						// then copy the array's content.
-						std::vector<int> vec_array(array, array + sizeof(array) / sizeof(array[0]));
-						// Safe number within the range, randomly selected.
-						int	nb_safe_array = array[rand() % 10];
-
-						test<std::map<Key, Mapped> >(std_file, vec_values, vec_array, nb_safe, nb_safe_array);
-						test<ft::map<Key, Mapped> >(ft_file, vec_values, vec_array, nb_safe, nb_safe_array);
+						test<std::map<Key, Mapped> >(std_file, vec_values, value_safe, std::make_pair<Key, Mapped>);
+						test<ft::map<Key, Mapped> >(ft_file, vec_values, value_safe, ft::make_pair<Key, Mapped>);
 					}
 
 					virtual void	operator() () {
 						std::srand(time(NULL));
-						std::vector<int>						vec_values;
+						vector_type						vec_values;
 
-						for (int i = 1 ; i < 30 ; ++i) {
-							int	new_nb = rand() % 20 + 1;
-							vec_values.push_back(new_nb);
+						ft::Random<Key>		random_generator;
+						random_generator.init_random_collection(Key());
+
+						for (int i = 1 ; i < 150 ; ++i) {
+							Key random_val = random_generator.generate(Key());
+							vec_values.push_back(random_val);
 						}
-						int	nb_safe = vec_values[rand() % 29];
-						std::random_shuffle(vec_values.begin(), vec_values.end());
+						Key	value_safe = vec_values[rand() % 149];
 
-						int	array[] = {8, 2, 10, 16, 5, 15, 17, 1, 6, 9};
-						// Create an vector from a static array.
-						// The called constructor use 'array' pointers to instantiate template,
-						// then copy the array's content.
-						std::vector<int> vec_array(array, array + sizeof(array) / sizeof(array[0]));
-						// Safe number within the range, randomly selected.
-						int	nb_safe_array = array[rand() % 10];
 
 						time_point start_time_std = clock_type::now();
-						test<std::map<Key, Mapped> >(std::cout, vec_values, vec_array, nb_safe, nb_safe_array);
+						test<std::map<Key, Mapped> >(std::cout, vec_values, value_safe, std::make_pair<Key, Mapped>);
 						time_point end_time_std = clock_type::now();
 
 						time_point start_time_ft = clock_type::now();
-						test<ft::map<Key, Mapped> >(std::cout, vec_values, vec_array, nb_safe, nb_safe_array);
+						test<ft::map<Key, Mapped> >(std::cout, vec_values, value_safe, ft::make_pair<Key, Mapped>);
 						time_point end_time_ft = clock_type::now();
 
 						elapsed_type span_time = duration_type(end_time_ft - start_time_ft).count() / duration_type(end_time_std - start_time_std).count();
@@ -298,15 +293,14 @@ namespace ft {
 							this->max_diff_time = span_time;
 					}
 
-					template <class Ct>
-						void	test(file_reference os, std::vector<int> collection,
-								std::vector<int> collection_array, int nb_safe, int nb_safe_array) {
+					template <class Ct, class MakePair>
+						void	test(file_reference os, vector_type collection, Key value_safe, MakePair mp) {
 							std::cout << "//////////////////////////ERASE/////////////////////////////////" << std::endl;
-							UnitestMapErase<Ct, Key>		instance_test;
+							UnitestMapErase<Ct, Key, Mapped, MakePair>		instance_test;
 							instance_test.erase_random_tree(os, collection);
-							instance_test.erase_safe_iterator_1(os, collection_array, nb_safe_array);
-							instance_test.erase_random(os, collection, nb_safe);
-							instance_test.erase_random_range_2(os, collection, nb_safe);
+							instance_test.erase_safe_iterator_1(os, collection, value_safe, mp);
+							instance_test.erase_random(os, collection, value_safe, mp);
+							instance_test.erase_random_range_2(os, collection, value_safe, mp);
 						}
 			};
 }

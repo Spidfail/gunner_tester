@@ -6,14 +6,16 @@
 # include "../../gunner_srcs/NEWGunner.hpp"
 # include "../../../map/Map.hpp"
 # include <map>
+# include <Pair.hpp>
 
 namespace ft {
 
-		template <class Ct, typename T>
+		template <class Ct, typename Key, typename Mapped>
 		struct UnitestMapLookup {
 
 			typedef	typename	Ct::size_type						size_type;
-			typedef				T									type_value;
+			typedef				Key									type_value;
+			typedef				Mapped								mapped_value;
 			typedef typename 	Gunner<type_value>::file_reference	stream_type;
 
 			static void	print_content(Ct map, bool is_print) {
@@ -31,7 +33,7 @@ namespace ft {
 			}
 
 			static void				count(stream_type &os, std::stack<int> stack) {
-				os << "//////////////////////////COUNT" << std::endl;
+				os << "//////////////////////////COUNKey" << std::endl;
 				Ct			test;
 				std::stack<int> 	stack_cpy(stack);
 				while (!stack_cpy.empty()) {
@@ -84,10 +86,9 @@ namespace ft {
 				}
 			}
 
+			template <class Pair, class ConstPair>
 			static void				equal_range(stream_type &os, std::stack<int> stack) {
 				std::cout << "//////////////////////////EQUAL RANGE" << std::endl;
-				typedef		typename Ct::iterator				iterator;
-				typedef		typename Ct::const_iterator			const_iterator;
 				Ct				test;
 				std::stack<int> 	stack_cpy(stack);
 				while (!stack_cpy.empty()) {
@@ -98,7 +99,7 @@ namespace ft {
 					{
 						os << "########## equal range on : " << stack.top() << std::endl;
 						os << " iterators : ";
-						ft::pair<iterator, iterator>			pair =	test.equal_range(stack.top());
+						Pair			pair =	test.equal_range(stack.top());
 						os << " [";
 						for ( ; pair.first != pair.second ; ++pair.first)
 							if (pair.second != test.end())
@@ -108,7 +109,7 @@ namespace ft {
 						os << "] ";
 					} {
 						os << " const_iterators : ";
-						ft::pair<const_iterator, const_iterator>			pair =	test.equal_range(stack.top());
+						ConstPair		pair =	test.equal_range(stack.top());
 						os << " [";
 						for ( ; pair.first != pair.second ; ++pair.first)
 							if (pair.second != test.end())
@@ -194,8 +195,12 @@ namespace ft {
 				const BulletMapLookup	&operator=(const BulletMapLookup &) { return *this; }
 				BulletMapLookup(const BulletMapLookup &) { }
 			public:
-				typedef 	typename Gunner<Key>::file_type  		file_type;
-				typedef 	typename Gunner<Key>::file_reference	file_reference;
+				typedef 	typename Gunner<Key>::file_type  				file_type;
+				typedef 	typename Gunner<Key>::file_reference			file_reference;
+				typedef 	typename ft::map<Key, Mapped>::iterator			iterator_cust;
+				typedef 	typename std::map<Key, Mapped>::iterator		iterator_offi;
+				typedef 	typename ft::map<Key, Mapped>::const_iterator	const_iterator_cust;
+				typedef 	typename std::map<Key, Mapped>::const_iterator	const_iterator_offi;
 				BulletMapLookup() {
 					min_diff_time = std::numeric_limits<Key>::max();
 					max_diff_time = std::numeric_limits<Key>::min();
@@ -204,39 +209,44 @@ namespace ft {
 
 					virtual void	operator() (file_reference std_file, file_reference ft_file) {
 						std::srand(time(NULL));
-
 						std::stack<int>						stack;
+						ft::Random<Key>		rand_generator;
+						rand_generator.init_random_collection(Key());
 						for (int i = 1 ; i < 50 ; ++i) {
-							int	new_nb = rand() % 40 + 1;
+							
 # ifdef DEBUG
 							ft_file << " IS VALID ? : " <<  test._is_valid() << std::endl;
 # endif
-							stack.push(new_nb);
+							stack.push(rand_generator.generate(Key()));
 						}
 
-						test<std::map<Key, Mapped> >(std_file, stack);
-						test<ft::map<Key, Mapped> >(ft_file, stack);
+						test<std::map<Key, Mapped>, std::pair<iterator_offi, iterator_offi>,
+							std::pair<const_iterator_offi, const_iterator_offi> >(std_file, stack);
+						test<ft::map<Key, Mapped>, ft::pair<iterator_cust, iterator_cust>,
+							ft::pair<const_iterator_cust, const_iterator_cust> >(ft_file, stack);
 					}
 
 					virtual void	operator() () {
 						std::srand(time(NULL));
 						// Construction of random map 
-
 						std::stack<int>						stack;
+						ft::Random<Key>						rand_generator;
+						rand_generator.init_random_collection(Key());
 						for (int i = 1 ; i < 50 ; ++i) {
-							int	new_nb = rand() % 40 + 1;
 # ifdef DEBUG
 							ft_file << " IS VALID ? : " <<  test._is_valid() << std::endl;
 # endif
-							stack.push(new_nb);
+							stack.push(rand_generator.generate(Key()));
 						}
 
 						time_point start_time_std = clock_type::now();
-						test<std::map<Key, Mapped> >(std::cout, stack);
+						test<std::map<Key, Mapped>, std::pair<iterator_offi, iterator_offi>,
+							std::pair<const_iterator_offi, const_iterator_offi> >(std::cout, stack);
 						time_point end_time_std = clock_type::now();
 
 						time_point start_time_ft = clock_type::now();
-						test<ft::map<Key, Mapped> >(std::cout, stack);
+						test<ft::map<Key, Mapped>, ft::pair<iterator_cust, iterator_cust>,
+							ft::pair<const_iterator_cust, const_iterator_cust> >(std::cout, stack);
 						time_point end_time_ft = clock_type::now();
 
 						elapsed_type span_time = duration_type(end_time_ft - start_time_ft).count() / duration_type(end_time_std - start_time_std).count();
@@ -247,13 +257,13 @@ namespace ft {
 							this->max_diff_time = span_time;
 					}
 
-				template <class Ct>
+				template <class Ct, class Pair, class ConstPair>
 					void	test(file_reference os, std::stack<int> stack) {
 						os << "//////////////////////////LOOKUP////////////////////////////////" << std::endl;
-						UnitestMapLookup<Ct, Key>		instance_test;
+						UnitestMapLookup<Ct, Key, Mapped>		instance_test;
 						instance_test.count(os, stack);
 						instance_test.find(os, stack);
-						instance_test.equal_range(os, stack);
+						instance_test.template equal_range<Pair, ConstPair>(os, stack);
 						instance_test.upper_bound(os, stack);
 						instance_test.lower_bound(os, stack);
 					}

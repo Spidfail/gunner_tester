@@ -22,6 +22,8 @@ test_diff() {
 	fi
 }
 
+
+# leaks -atExit -- ./gunner_container $_results_std $_results_ft
 ./gunner_container $_results_std $_results_ft > /dev/null
 
 array_ft=($(ls -d "$_results_ft"/*))

@@ -17,6 +17,12 @@
 #include "../tests/vector/VectorConstructorTests.hpp"
 #include "../tests/vector/VectorCapacityTests.hpp"
 
+#include "../tests/map/MapEraseTests.hpp"
+#include "../tests/map/MapInsertTest.hpp"
+#include "../tests/map/MapLookupTest.hpp"
+
+#include <stdlib.h>
+
 int	main(int ac, char **av) {
 	if (ac != 3) {
 		std::cerr << "[ERROR] arguments required : [std result ouput directory] [ft result ouput directory]" << std::endl;
@@ -37,4 +43,12 @@ int	main(int ac, char **av) {
 	silvector_stalone.fire();
 	silvector_stalone.fire_bench(1000);
 	silvector_stalone.get_bench();
+
+	Gunner<int>		termapitor;
+	termapitor.add_bullet<ft::BulletMapErase<int, std::string> > (path_std + "map_erase", path_ft + "map_erase");
+	termapitor.add_bullet<ft::BulletMapLookup<int, std::string> > (path_std + "map_lookup", path_ft + "map_lookup");
+	termapitor.add_bullet<ft::BulletMapInsert<int, std::string> > (path_std + "map_insert", path_ft + "map_insert");
+	termapitor.fire();
+	termapitor.fire_bench(1000);
+	termapitor.get_bench();
 }

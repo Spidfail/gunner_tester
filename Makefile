@@ -38,14 +38,14 @@ include $(SRCS_DIR)/include.mk
 
 _INC_TEST_V			:= 
 _INC_TEST_V_PATH	:= 
-# _INC_TEST_M			:=
-# _INC_TEST_M_PATH		:=
+_INC_TEST_M			:=
+_INC_TEST_M_PATH		:=
 # _INC_TEST_S			:=
 # _INC_TEST_S_PATH		:=
 include $(_INC_TEST_DIR)/include.mk
 
 
-_INC_TESTS_PATH			:= $(_INC_TEST_V_PATH) # $(_INC_TEST_M_PATH) $(_INC_TEST_S_PATH)
+_INC_TESTS_PATH			:= $(_INC_TEST_V_PATH)  $(_INC_TEST_M_PATH) # $(_INC_TEST_S_PATH)
 _INC_TESTS_DIR			:= $(_INC_TEST_V_DIR) $(_INC_TEST_M_DIR) $(_INC_TEST_S_DIR)
 
 ################################################################################
@@ -72,7 +72,7 @@ OBJS				:= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 ################################################################################
 
-.PHONY: debug all run clean fclean
+.PHONY:  all re run clean fclean
 
 all :					$(NAME)
 
@@ -81,9 +81,6 @@ $(NAME) :				$(OBJS)
 
 run:	| $(NAME)
 	bash run_diff.sh
-
-debug :
-	echo $(foreach v, $(.VARIABLES), $(info $(v) = $($(v))))
 
 gunner_objs/%.o :		%.cpp $(INC) | $(_REQUIRED_DIR)
 	$(CC) $(CFLAGS) $(_INCLUDE_DIR)  -c $< -o $@

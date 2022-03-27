@@ -58,7 +58,6 @@ template <> void			inline ft::Random<int>::init_random_collection(int) {
 
 template <> std::string		inline ft::Random<std::string>::generate(std::string, unsigned short int len) {
 	std::string		tmp;
-	std::srand(time(NULL));
 	tmp.reserve(len);
 
 	for (int i = 0; i < len; ++i) {
@@ -69,7 +68,6 @@ template <> std::string		inline ft::Random<std::string>::generate(std::string, u
 
 template <> int				inline ft::Random<int>::generate(int, unsigned short int len) {
 	(void)len;
-	std::srand(time(NULL));
 	int rand_nb = rand();
 
 	for ( ; rand_nb == 0 ; rand_nb = rand()) { }

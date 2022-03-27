@@ -27,10 +27,11 @@ class ABullet {
 		virtual ~ABullet() { }
 };
 
-template <typename T>
+template <typename T, typename Mapped = std::string>
 class Gunner {
 	public:
 		typedef		T													value_type;
+		typedef		Mapped												mapped_type;
 		typedef 	size_t												size_type;
 		typedef 	double												elapsed_type;
 		typedef 	std::string											name_type;
@@ -41,7 +42,6 @@ class Gunner {
 		typedef		std::chrono::duration<elapsed_type, std::milli>		duration_type;
 		typedef		std::chrono::steady_clock::time_point				time_point;
 		typedef		std::chrono::high_resolution_clock					clock_type;
-
 
 	private:
 		struct Gun_entry {
@@ -113,6 +113,9 @@ class Gunner {
 				(*entry->test) (std_os, ft_os);
 			}
 		}
+
+
 };
+
 
 #endif

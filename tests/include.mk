@@ -16,8 +16,12 @@ _INC_TEST_V			:=	VectorAccessorsTests.hpp \
 						VectorIteratorsTests.hpp \
 						VectorModifiersTests.hpp
 
- _INC_TEST_V_PATH	:=	$(addprefix $(_INC_TEST_V_DIR)/, $(_INC_TEST_V))
-# 
-# _INC_TEST_M_PATH	:=	$(addprefix $(_INC_TEST_M_DIR)/, $(_INC_TEST_M))
+_INC_TEST_M			:=  MapEraseTests.hpp \
+					    MapInsertTest.hpp \
+					    MapLookupTest.hpp
+
+_INC_TEST_V_PATH	:=	$(addprefix $(_INC_TEST_V_DIR)/, $(_INC_TEST_V))
+
+_INC_TEST_M_PATH	:=	$(addprefix $(_INC_TEST_M_DIR)/, $(_INC_TEST_M))
 # 
 # _INC_TEST_S_PATH	:=	$(addprefix $(_INC_TEST_S_DIR)/, $(_INC_TEST_S))
