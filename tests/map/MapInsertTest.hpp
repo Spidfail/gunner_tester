@@ -18,18 +18,18 @@ namespace ft {
 			typedef	typename	Ct::value_type						value_type;
 			typedef				std::vector<int>::iterator			iterator_vector;
 
-			static void	print_content(Ct map, bool is_print) {
+			static void	print_content(Ct map, stream_type &os) {
 				typedef		typename Ct::iterator			iterator_type;
-				if (is_print)
-					for (iterator_type it = map.begin() ; it != map.end() ; ++it)
-						std::cout << it->first << " " << it->second << std::endl;
+				for (iterator_type it = map.begin() ; it != map.end() ; ++it)
+					os << it->first << " " << it->second << " | ";
+				os << std::endl;
 			}
 
-			static void	print_reverse_content(Ct map, bool is_print) {
+			static void	print_reverse_content(Ct map, stream_type &os) {
 				typedef		typename Ct::reverse_iterator	reverse_iterator_type;
-				if (is_print)
-					for (reverse_iterator_type it = map.rbegin() ; it != map.rend() ; ++it)
-						std::cout << it->first << " " << it->second << std::endl;
+				for (reverse_iterator_type it = map.rbegin() ; it != map.rend() ; ++it)
+					os << it->first << " " << it->second << " | ";
+				os << std::endl;
 			}
 
 				static void				insert_one_selected(stream_type &os) {
@@ -38,39 +38,39 @@ namespace ft {
 					os << "#### First state : ";
 					os << "#### Insert 8: ";
 					test.insert(value_type(8, "caca"));
-					print_content(test, true);
+					print_content(test, os);
 					os << std::endl;
 					os << "#### Insert 5: ";
 					test.insert(value_type(5, "pipi"));
-					print_reverse_content(test, true);
+					print_reverse_content(test, os);
 					os << std::endl;
 					os << "#### Insert 1: ";
 					test.insert(value_type(1, "crotte"));
-					print_reverse_content(test, true);
+					print_reverse_content(test, os);
 					os << std::endl;
 					os << "#### Insert 2: ";
 					test.insert(value_type(2, "crotte"));
-					print_reverse_content(test, true);
+					print_reverse_content(test, os);
 					os << std::endl;
 					os << "#### Insert 7: ";
 					test.insert(value_type(7, "zigouigoui"));
-					print_reverse_content(test, true);
+					print_reverse_content(test, os);
 					os << std::endl;
 					os << "#### Insert 9: ";
 					test.insert(value_type(9, "popo"));
-					print_content(test, true);
+					print_content(test, os);
 					os << std::endl;
 					os << "#### Insert 4: ";
 					test.insert(value_type(4, "popo"));
-					print_content(test, true);
+					print_content(test, os);
 					os << std::endl;
 					os << "#### Insert 7: ";
 					test.insert(value_type(7, "popo"));
-					print_content(test, true);
+					print_content(test, os);
 					os << std::endl;
 					os << "#### Insert 6: ";
 					test.insert(value_type(6, "popo"));
-					print_content(test, true);
+					print_content(test, os);
 					os << std::endl;
 				}
 
@@ -80,7 +80,7 @@ namespace ft {
 						Ct			test2;
 						for (iterator_vector it = range.begin() ; it != range.end() ; ++it) {
 							test2.insert(value_type(*it, "lol"));
-							print_content(test2, true);
+							print_content(test2, os);
 # ifdef DEBUG
 							os << " IS VALID ? : " <<  test2._is_valid() << std::endl;
 # endif
@@ -91,7 +91,7 @@ namespace ft {
 						Ct			test;
 						for (iterator_vector it = range.begin() ; it != range.end() ; ++it) {
 							test.insert(test.begin(), value_type(*it, "lol"));
-							print_content(test, true);
+							print_content(test, os);
 # ifdef DEBUG
 							os << " IS VALID ? : " <<  test._is_valid() << std::endl;
 # endif
@@ -106,7 +106,7 @@ namespace ft {
 						Ct			test2;
 						for (iterator_vector it = range.begin() ; it != range.end() ; ++it) {
 							test2[*it] = "lol";
-							print_content(test2, true);
+							print_content(test2, os);
 # ifdef DEBUG
 							os << " IS VALID ? : " <<  test2._is_valid() << std::endl;
 # endif
@@ -122,7 +122,7 @@ namespace ft {
 						test2.insert(range.begin(), range.end());
 						// Test with same range
 						test2.insert(range.begin(), range.end());
-						print_content(test2, true);
+						print_content(test2, os);
 						os << std::endl;
 					}
 				}
@@ -152,7 +152,8 @@ namespace ft {
 						std::map<Key, Mapped>				map_values_off;
 						for (int i = 1 ; i < 50 ; ++i) {
 							Key		new_value = random_generator.generate(Key());
-							std::cout << " #### insert " << new_value << " : ";
+							std_file << " #### insert " << new_value << " : ";
+							ft_file << " #### insert " << new_value << " : ";
 							map_values[new_value] = "mdr";
 							map_values_off[new_value] = "mdr";
 #ifdef DEBUG

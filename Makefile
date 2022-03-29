@@ -13,7 +13,7 @@
 NAME				:= gunner_container
 CC					:= clang++
 CSAN				:= -fsanitize=address -g3
-CFLAGS				:= -Wall -Wextra -Werror -std=c++98
+CFLAGS				:= -g3 -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR				:= gunner_objs
 SRCS_DIR			:= gunner_srcs
@@ -77,13 +77,13 @@ OBJS				:= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 all :					$(NAME)
 
 $(NAME) :				$(OBJS) 
-	$(CC) $< -o $@
+	$(CC) $(CSAN) $< -o $@
 
 run:	| $(NAME)
 	bash run_diff.sh
 
 gunner_objs/%.o :		%.cpp $(INC) | $(_REQUIRED_DIR)
-	$(CC) $(CFLAGS) $(_INCLUDE_DIR)  -c $< -o $@
+	$(CC) $(CSAN) $(CFLAGS) $(_INCLUDE_DIR)  -c $< -o $@
 
 $(_REQUIRED_DIR):
 		mkdir -p $(_REQUIRED_DIR)

@@ -17,8 +17,10 @@ _INC_TEST_V			:=	VectorAccessorsTests.hpp \
 						VectorModifiersTests.hpp
 
 _INC_TEST_M			:=  MapEraseTests.hpp \
-					    MapInsertTest.hpp \
-					    MapLookupTest.hpp
+						MapInsertTest.hpp \
+						MapLookupTest.hpp \
+						MapConstructorTests.hpp \
+						MapCapacityTest.hpp
 
 _INC_TEST_V_PATH	:=	$(addprefix $(_INC_TEST_V_DIR)/, $(_INC_TEST_V))
 

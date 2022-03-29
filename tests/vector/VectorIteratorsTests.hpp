@@ -37,14 +37,11 @@ namespace ft {
 					os << std::boolalpha << (it == it2) << " ";
 				} {
 					Ct	vecfill(10, random_value);
-					typename Ct::reverse_iterator it;
-					it = vecfill.rbegin();
 					Ct	vecfill2(20, replacement);
+					typename Ct::reverse_iterator it = vecfill.rbegin();
 					vecfill = vecfill2;
 					typename Ct::reverse_iterator it2 = vecfill.rbegin();
 					os << std::boolalpha << (it == it2) << " ";
-					typename Ct::reverse_iterator it3(vecfill2.begin());
-					os << std::boolalpha << (it3 == it2) << " ";
 				}
 				os << std::endl;
 			}

@@ -13,7 +13,9 @@
 _SRCS_GUNNER 		:= main.cpp
 _INC_GUNNER			:= NEWGunner.hpp \
 					   IsStd.hpp \
-					   ft_random.hpp 
+					   ft_random.hpp \
+					   PrintText.hpp \
+					   VectorTesterUtils.hpp
 
 _SRCS_GUNNER_PATH	:= $(addprefix $(SRCS_DIR)/, $(_SRCS_GUNNER))
 _INC_GUNNER_PATH	:= $(addprefix $(SRCS_DIR)/, $(_INC_GUNNER))
