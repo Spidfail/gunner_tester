@@ -12,7 +12,7 @@
 
 NAME				:= gunner_container
 CC					:= clang++
-CSAN				:= -fsanitize=address -g3
+CSAN				:= -fsanitize=address
 CFLAGS				:= -g3 -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR				:= gunner_objs
@@ -39,13 +39,13 @@ include $(SRCS_DIR)/include.mk
 _INC_TEST_V			:= 
 _INC_TEST_V_PATH	:= 
 _INC_TEST_M			:=
-_INC_TEST_M_PATH		:=
-# _INC_TEST_S			:=
-# _INC_TEST_S_PATH		:=
+_INC_TEST_M_PATH	:=
+_INC_TEST_S			:=
+_INC_TEST_S_PATH	:=
 include $(_INC_TEST_DIR)/include.mk
 
 
-_INC_TESTS_PATH			:= $(_INC_TEST_V_PATH)  $(_INC_TEST_M_PATH) # $(_INC_TEST_S_PATH)
+_INC_TESTS_PATH			:= $(_INC_TEST_V_PATH) $(_INC_TEST_M_PATH) $(_INC_TEST_S_PATH)
 _INC_TESTS_DIR			:= $(_INC_TEST_V_DIR) $(_INC_TEST_M_DIR) $(_INC_TEST_S_DIR)
 
 ################################################################################

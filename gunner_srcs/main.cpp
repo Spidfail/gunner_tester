@@ -25,6 +25,8 @@
 #include "../tests/map/MapLookupTest.hpp"
 #include "../tests/map/MapConstructorTests.hpp"
 
+#include "../tests/stack/StackTests.hpp"
+
 #include <stdlib.h>
 
 int	main(int ac, char **av) {
@@ -65,6 +67,7 @@ int	main(int ac, char **av) {
 	silvector_stalone.fire_bench(1000);
 	silvector_stalone.get_bench();
 
+
 	std::clog << std::endl << "		";
 	big_titles("LAUNCHING TERMAPITOR");
 	std::clog << std::endl << std::endl;
@@ -84,4 +87,21 @@ int	main(int ac, char **av) {
 	std::clog << std::endl << std::endl;
 	termapitor.fire_bench(1000);
 	termapitor.get_bench();
+
+
+	std::clog << std::endl << "		";
+	big_titles("LAUNCHING LIL STACK, MY MAN");
+	std::clog << std::endl << std::endl;
+
+	Gunner<int>		lil_stack;
+	lil_stack.add_bullet<ft::BulletStack<int> > (path_std + "stack", path_ft + "stack");
+	std::clog << std::endl;
+	title("============ LAUNCHING TESTS ============");
+	std::clog << std::endl << std::endl;
+	lil_stack.fire();
+	std::clog << std::endl << std::endl;
+	title("============ LAUNCHING BENCHMARK ============");
+	std::clog << std::endl << std::endl;
+	lil_stack.fire_bench(1000);
+	lil_stack.get_bench();
 }

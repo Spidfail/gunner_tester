@@ -17,11 +17,7 @@
 # include "../../gunner_srcs/NEWGunner.hpp"
 # include "../../../vector/Vector.hpp"
 
-
-#include <iostream>
-
 namespace ft {
-
 
 		template <class Ct, typename type_value>
 
@@ -30,12 +26,15 @@ namespace ft {
 			typedef typename Ct::size_type							size_type;
 			typedef typename Gunner<type_value>::file_reference		stream_type;
 
+			// Allocate size of 0 can cause leaks.
+			// Treated as unedefind behavior.
+
 				static void				operator_bracket(stream_type &os, type_value random_value) {
-					for (int j = 0 ; j < 100 ; j++) {
+					for (int j = 1 ; j < 100 ; j++) {
 						Ct	vecfill(j, random_value);
 						for (int i = 0 ; i < j ; i++) {os << vecfill[i] << " ";}
 					}
-					for (int j = 0 ; j < 10 ; j++) {
+					for (int j = 1 ; j < 10 ; j++) {
 						const Ct	vecfill(j, random_value);
 						for (int i = 0 ; i < j ; i++) {os << vecfill[i] << " ";}
 					}
@@ -43,11 +42,11 @@ namespace ft {
 				}
 
 				static void				at(stream_type &os, type_value random_value) {
-					for (int j = 0 ; j < 100 ; j++) {
+					for (int j = 1 ; j < 100 ; j++) {
 						Ct	vecfill(j, random_value);
 						for (int i = 0 ; i < j ; i++) {os << vecfill.at(i) << " ";}
 					}
-					for (int j = 0 ; j < 10 ; j++) {
+					for (int j = 1 ; j < 10 ; j++) {
 						const Ct	vecfill(j, random_value);
 						for (int i = 0 ; i < j ; i++) {os << vecfill.at(i) << " ";}
 					}

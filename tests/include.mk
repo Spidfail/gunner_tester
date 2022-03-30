@@ -22,8 +22,10 @@ _INC_TEST_M			:=  MapEraseTests.hpp \
 						MapConstructorTests.hpp \
 						MapCapacityTest.hpp
 
+_INC_TEST_S			:=	StackTests.hpp
+
 _INC_TEST_V_PATH	:=	$(addprefix $(_INC_TEST_V_DIR)/, $(_INC_TEST_V))
 
 _INC_TEST_M_PATH	:=	$(addprefix $(_INC_TEST_M_DIR)/, $(_INC_TEST_M))
-# 
-# _INC_TEST_S_PATH	:=	$(addprefix $(_INC_TEST_S_DIR)/, $(_INC_TEST_S))
+ 
+_INC_TEST_S_PATH	:=	$(addprefix $(_INC_TEST_S_DIR)/, $(_INC_TEST_S))

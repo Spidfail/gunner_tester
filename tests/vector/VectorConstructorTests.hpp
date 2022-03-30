@@ -31,7 +31,9 @@ namespace ft {
 						Ct	vecfill(20, random_value);
 						os << vecfill.size() << std::endl;
 					} {
-						Ct	vecfill(0, random_value);
+						// Allocate size of 0 can cause leaks.
+						// Treated as unedefind behavior.
+						Ct	vecfill(1, random_value);
 						os << vecfill.size() << std::endl;
 					} {
 						try {
@@ -54,11 +56,13 @@ namespace ft {
 						Ct	vecrange(vectill.begin(), vectill.end());
 						for (size_type i = 0 ; i < vectill.size() ; i++) { os << vecrange[i] << " "; }
 						os << std::endl;
-					} {
+					}
+					{
 						Ct	vecfill(20, random_value);
 						Ct	vecrange(vecfill.begin(), vecfill.begin());
 						os << vecrange.size() << std::endl;
-					} {
+					}
+					{
 						Ct	vecfill(20, random_value);
 						Ct	vecrange(vecfill.begin(), vecfill.begin() + 1);
 						for (size_type i = 0 ; i < vecrange.size() ; i++) { os << vecrange[i] << " "; }
@@ -73,7 +77,7 @@ namespace ft {
 						Ct	vecrange(vecfill.rbegin(), vecfill.rbegin() + 1);
 						for (size_type i = 0 ; i < vecrange.size() ; i++) { os << vecrange[i] << " "; }
 						os << vecfill.size() << std::endl;
-					} 
+					}
 				}
 
 				static void				operator_assignation(stream_type &os, type_value random_value) {
@@ -83,7 +87,8 @@ namespace ft {
 						vec = vecfill;
 						for (size_type i = 0 ; i < vecfill.size() ; i++) { os << vec[i] << " "; }
 						os << vecfill.size() << std::endl;
-					} {
+					}
+					{
 						Ct	vecfill(20, random_value);
 						Ct	vec;
 						vecfill = vec;
@@ -335,6 +340,7 @@ namespace ft {
 				virtual ~BulletConstructor() { }
 
 				virtual void	operator() (file_reference std_file, file_reference ft_file) {
+					srand(time(NULL));
 					ft::Random<T>	random_generator;
 					random_generator.init_random_collection(T());
 					T random1 = random_generator.generate(T());
@@ -344,6 +350,7 @@ namespace ft {
 				}
 
 				virtual void	operator() () {
+					srand(time(NULL));
 					ft::Random<T>	random_generator;
 					random_generator.init_random_collection(T());
 					T random1 = random_generator.generate(T());
