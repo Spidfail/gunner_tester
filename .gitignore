@@ -36,8 +36,6 @@ gunner_container
 .cache
 compile_commands.json
 
-# Compile database with compildb for nvim
-compile_commands.json
 
 # Output files from tests
 gunner_results/details_ft/*
