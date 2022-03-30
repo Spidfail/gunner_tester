@@ -32,6 +32,9 @@
 *.app
 gunner_container
 
+# Compalation and Clangd
+.cache
+compile_commands.json
 
 # Compile database with compildb for nvim
 compile_commands.json
