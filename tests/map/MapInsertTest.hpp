@@ -116,13 +116,34 @@ namespace ft {
 				}
 
 				static void				insert_random_range(stream_type &os, Ct &range) {
-					os << "//////////////////////////RANDOM INSERT RANGE [1 - 20]" << std::endl;
+					os << "//////////////////////////RANDOM INSERT RANGE [1 - 50]" << std::endl;
 					{
 						Ct			test2;
 						test2.insert(range.begin(), range.end());
 						// Test with same range
 						test2.insert(range.begin(), range.end());
 						print_content(test2, os);
+						os << std::endl;
+					}
+				}
+
+				static void				insert_random_and_iterator(stream_type &os, Ct &range) {
+					os << "//////////////////////////RANDOM INSERT RANGE [1 - 50]" << std::endl;
+					{
+						Ct			test2;
+						typename Ct::iterator it = range.begin();
+						for (int i = 0 ; i < 27 ; ++i)
+							++it;
+						test2.insert(range.begin(), it);
+						// Create iterator before insert
+						typename Ct::iterator it_test = test2.begin();
+						++it_test;
+						// Test with same range
+						test2.insert(range.begin(), range.end());
+						print_content(test2, os);
+						os << " Print content with previous iterator : ";
+						for (; it_test != test2.end() ; ++it_test)
+							os << it_test->first << " ";
 						os << std::endl;
 					}
 				}
@@ -214,6 +235,7 @@ namespace ft {
 						instance_test.insert_define_range(os, range_array);
 						instance_test.insert_define_operator(os, range_array);
 						instance_test.insert_random_range(os, map_values);
+						instance_test.insert_random_and_iterator(os, map_values);
 					}
 		};
 }
