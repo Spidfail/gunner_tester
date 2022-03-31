@@ -6,7 +6,7 @@
 # include "../../gunner_srcs/NEWGunner.hpp"
 # include "../../../map/Map.hpp"
 # include <map>
-# include "../Pair.hpp"
+# include "Pair.hpp"
 # include <algorithm>
 
 namespace ft {
@@ -33,11 +33,6 @@ namespace ft {
 							it != vec_values.end() ; ++it) {
 						os << " ## Erase : " << *it << std::endl;
 						test.erase(*it);
-						// os.flush();
-						// os << "RANGE = ";
-						// for (typename Ct::iterator it = test.begin() ; it != test.end() ; ++it) {
-							// os << it->first << " ";
-						// }
 # ifdef DEBUG
 						os << " IS VALID ? " << test._is_valid() << std::endl << std::endl;
 # endif

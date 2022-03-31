@@ -6,14 +6,15 @@
 #    By: guhernan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/09 22:18:19 by guhernan          #+#    #+#              #
-#    Updated: 2022/02/10 23:01:13 by guhernan         ###   ########.fr        #
+#    Updated: 2022/03/30 21:53:09 by guhernan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				:= gunner_container
-CC					:= clang++
-CSAN				:= -fsanitize=address
-CFLAGS				:= -g3 -Wall -Wextra -Werror -std=c++98
+CC					:= c++
+CSAN				:= -fsanitize=address -g3
+CFLAGS				:= -Wall -Wextra -Werror
+CVER				:= -std=c++98
 
 OBJ_DIR				:= gunner_objs
 SRCS_DIR			:= gunner_srcs
@@ -77,13 +78,13 @@ OBJS				:= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 all :					$(NAME)
 
 $(NAME) :				$(OBJS) 
-	$(CC) $(CSAN) $< -o $@
+	$(CC) $(CFLAGS) $(CSAN) $< -o $@
 
 run:	| $(NAME)
 	bash run_diff.sh
 
 gunner_objs/%.o :		%.cpp $(INC) | $(_REQUIRED_DIR)
-	$(CC) $(CSAN) $(CFLAGS) $(_INCLUDE_DIR)  -c $< -o $@
+	$(CC) $(CSAN) $(CFLAGS) $(CVER) $(_INCLUDE_DIR)  -c $< -o $@
 
 $(_REQUIRED_DIR):
 		mkdir -p $(_REQUIRED_DIR)
